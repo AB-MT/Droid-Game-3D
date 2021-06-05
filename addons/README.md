@@ -2,7 +2,7 @@
 
 Here you can make special additions for the game. 
 
-An example is located in the same folder.
+An example is located in the same folder. [Open example](https://gitlab.com/polskiychel/droidgame3d/-/blob/main/addons/example.txt)
 
 Here you can make special additions for the game. 
 
