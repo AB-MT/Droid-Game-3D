@@ -1,0 +1,6 @@
+Addon Loading is simple. Just put a the addon folder in the addons folder
+Then open the addon folder and open main.py file and look for the main class.
+After that open addon_config.json and add a new entry as follows.
+"addon name (must match the name of the addon folder)": {"disabled": false/true, "main_class": "main class name"}.
+You can enable and disable addons whenever needed.
+Then, run the game as normal.
