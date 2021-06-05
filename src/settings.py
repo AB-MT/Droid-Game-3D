@@ -2,8 +2,8 @@
 import src.ipgetter as ipgetter
 # Настройки, информция
 
-VERSION = 'beta 9.1.4' # версия
-COPYRIGHT = 'Marc Kim 2021' # автор, год создания
+VERSION = 'beta 9.1.4.1' # версия
+COPYRIGHT = 'Mark Kim 2021' # автор, год создания
 DEVELOP_MODE = False # не включаем режим разроботчика
 DEFAULT_IP = '127.0.0.1' # IP по умолчанию
 IP_USER = ipgetter.myip() # IP пользователя
