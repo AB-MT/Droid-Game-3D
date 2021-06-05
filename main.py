@@ -108,7 +108,7 @@ def start_client():
 
 def showHelpInfo():
     # Говорим пользователю об использованию
-    print('Droid Game ' + VERSION + ' - ' + COPYRIGHT) # информация о игре
+    print('Droid Game beta ' + VERSION + ' - ' + COPYRIGHT) # информация о игре
     print('Использование(Usage):') # использование
     print('-d \t\t\Режим разробтчика(Developer mode)') # тут всё написано
     print('-l \t\t\Скачать уровни(Download levels)') # и тут тоже
