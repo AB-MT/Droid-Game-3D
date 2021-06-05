@@ -1,0 +1,6 @@
+panda3d
+PySimpleGUI
+ipgetter2
+screeninfo
+simplepbr
+pyperclip
