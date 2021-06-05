@@ -1631,10 +1631,10 @@ class DroidShooter(ShowBase):
 
 
         # Шейдеры
-        GameApi.shaders(self, "./shaders/realistic/bloom.glsl", "./shaders/realistic/blur.glsl")
-        GameApi.shaders(self, "./shaders/realistic/outline.glsl", "./shaders/realistic/repeat.glsl")
-        GameApi.shaders(self, "./shaders/realistic/glow.glsl", "./shaders/realistic/grayscale.glsl")
-        GameApi.shaders(self, "./shaders/realistic/shadow.frag", "./shaders/realistic/shadow.vert")
+        GameApi.shaders(self, vert="./shaders/realistic/bloom.glsl", frag="./shaders/realistic/blur.glsl")
+        GameApi.shaders(self, vert="./shaders/realistic/outline.glsl", frag="./shaders/realistic/repeat.glsl")
+        GameApi.shaders(self, vert="./shaders/realistic/glow.glsl", frag="./shaders/realistic/grayscale.glsl")
+        GameApi.shaders(self, vert="./shaders/realistic/shadow.frag", frag="./shaders/realistic/shadow.vert")
         
         # Если  игрок захотел поиграть в чёрнобелую игру, проверим это
         if self.GB :        
