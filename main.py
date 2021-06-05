@@ -126,6 +126,28 @@ elif '-d' in sys.argv:
 elif '-l' in sys.argv:
     downloading()
 
+class Capture_flag():
+    def __init__(self, player, base_1, base_2):
+        self.player = player
+        self.base_1 = base_1
+        self.base_2 = base_2
+        
+        self.player_pos = self.player.getPos()
+        self.base_1_pos = base_1.getPos()
+        self.base_21_pos = base_2.getPos()
+
+    def update(self):
+        self.player_pos = self.player.getPos()
+        self.base_1_pos = self.base_1.getPos()
+        self.base_2_pos = self.base_2.getPos()
+
+        if self.player_pos == self.base_2_pos:
+            return True
+
+        if self.player_pos == self.base_1_pos:
+            return False
+        
+
 # Создадим главный класс нашей игры
 class DroidShooter(ShowBase):
     def __init__(self):
@@ -1534,6 +1556,12 @@ class DroidShooter(ShowBase):
 
         taskMgr.add(self.move, "moveTask") # Добавляем задачу в наш движок
 
+        self.capture_flag = Capture_flag(player=self.droid,
+                                         base_1=self.environ,
+                                         base_2=self.planet)
+
+        taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")
+
         self.isMoving = False # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
         # Делаем так, чтобы свет был изначально выключен.
         self.camera.setPos(self.droid.getX(), self.droid.getY() + 1, 3) # Ставим позицию камеры чуть больше позиции игрока
@@ -1613,6 +1641,12 @@ class DroidShooter(ShowBase):
             GameApi.shaders(self, "./shaders/lighting.vert", "./shaders/lighting.frag") # теперь шейдеры работают!
             #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
 
+    def capture_flag_update(self, task):
+        self.result = self.capture_flag.update() # u1pdating  capture flag
+        if self.result:
+            print('You WIN!!!')
+            self.exit()
+    
     def _grenade_boom(self):
         # играем звуки гранаты
         self.grenade_launch.play()
