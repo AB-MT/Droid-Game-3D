@@ -1,0 +1,12 @@
+salespitch=
+textures=chair-2texturemap.png floor.png hallway.png pipes.png console.png table.png chess.png ceiling.png walls.png lights.png chair.png corner.png chesstabletexturemap.png 
+solid-models=falcon 
+name=Millenium Falcon
+license=CCA 2.0
+other-files=falcon.mb 
+id=milleniumfalcon
+date=2004-12-13
+keywords=Space Ship
+modeler=Seth Shain
+painter=TJ Jackson
+animator=
