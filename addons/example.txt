@@ -1,0 +1,19 @@
+# Addon 'NAME'
+
+version = VERSION
+title = TITLE
+
+def test_addon(args):
+	.....
+	.....
+	print('Addon starting!')
+	start_addon(args)
+
+def start_addon(args):
+	print(title + 'addon started in version ' + version)
+	....
+	....
+	print('Addon succesed started!')
+
+if __name__ == '__main__':
+	test_addon(args)
