@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf_8 -*-
 
@@ -33,7 +32,7 @@ from src.marconit_engine import *
 from src.bot import bot
 from src.net import *
 from src.loading_levels import *
-from download_levels import downloading
+from src.parsers.download_levels import downloading
 from src.settings import *
 import src.gui as gui
 from src.GUI.choose_server import *
