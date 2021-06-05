@@ -31,7 +31,7 @@ from panda3d.core import *
 from src.marconit_engine import *
 from src.bot import bot
 from src.net import *
-from src.loading_levels import *
+from src.parsers.loading_levels import *
 from src.parsers.download_levels import downloading
 from src.settings import *
 import src.gui as gui
