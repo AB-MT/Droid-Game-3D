@@ -1,4 +1,6 @@
 # Addon 'NAME'
+# Copyright COPYRIGHT
+# Version VERSION
 
 version = VERSION
 title = TITLE
