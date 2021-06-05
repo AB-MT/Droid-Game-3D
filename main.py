@@ -94,7 +94,7 @@ def load_profile(filename_p):
     '''загружаем профиль'''
     with open(filename_p) as f: # загружаем файл с профилем
         for line in f: # читаем линии в файле
-            return line + str(random.randrange(0, 1000)) # возвращаем имя игрока
+            return line + str(random.randrange(0, 1500)) # возвращаем имя игрока
         
 USERNAME = load_profile('./profile.txt') # загружаем профиль
 
