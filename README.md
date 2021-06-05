@@ -1,7 +1,7 @@
 [![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/DroidGame/DroidGame3D?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Droid Game 3D
-This is a very interesting game in which you can fight droid bots and online with other players. Unite in teams, and arrange a capture of the flag (***mode in development***).<br><br>
+This is a very interesting game in which you can fight droid bots and online with other players. Unite in teams, and arrange a capture of the flag.<br><br>
 
 # Some information about the game
 
