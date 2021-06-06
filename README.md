@@ -9,11 +9,11 @@ This is a very interesting game in which you can fight droid bots and online wit
 
 At the moment the game is on beta 9.1.4.1 There may be some crashes in the beta version, if this happens write to us!
 
-***Popular servers***<br><br>
+<h3>Popular servers</h3> <br><br>
 
 At the moment, the most popular are the admin server and DOOMPY.<br><br>
 
-***Server statistics***<br><br>
+<h3>Server statistics</h3> <br><br>
 
 Admin fun server - 14 players per day.<br>
 DOOMPY - 12 players per day.<br>
