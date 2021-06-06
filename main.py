@@ -1380,6 +1380,7 @@ class DroidShooter(ShowBase):
 
     def set_lifes(self):
         self.state = self.pg28909.guiItem.getValue() * 100 # загрузим слайдерное значение умноженое на 100, да трачу оптимизацию но мне кажется многим плевать на оптимизацию меню, ибо такого понятия просто нету :)
+        self.state_droid = self.state / 2
 
     def gb_mode(self):
         '''включение чёрнобелого режима'''
@@ -1585,6 +1586,7 @@ class DroidShooter(ShowBase):
         self.motor2 = GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf', self.motor_pos2, self.environ) # мотор 2
 
         self.state_info2 = MenuApi.text(self, text='', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+        self.state_droid_info = MenuApi.text(self, text=str(self.state_droid), pos=(-1.3, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии дроида
 
         self.force = False # Поставим, что не разгонялись
 
@@ -1642,7 +1644,7 @@ class DroidShooter(ShowBase):
             #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
 
     def capture_flag_update(self, task):
-        self.result = self.capture_flag.update() # u1pdating  capture flag
+        self.result = self.capture_flag.update() # updating  capture flag
         if self.result:
             print('You WIN!!!')
             self.exit()
@@ -1895,12 +1897,23 @@ class DroidShooter(ShowBase):
 
             self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)    
             GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos, self.environ)
+            if self.fountain_pos == self.droid.getPos():
+                if not self.EN:
+                    self.state_info.setText('РЖАВЧИНА!')
+                else:
+                    self.state_info.setText('RUST!')
+
+                self.state_droid -= 10
+                self.state_droid_info.setText(str(self.state_droid))) # обновление состояния дроида
 
         else :
             if self.state != 100:
                 self.state += 1
                 self.state_info.hide()
-                MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+                if not self.EN:
+                    MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+                else :
+                    MenuApi.text(self, text='machine :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля ON ENGLISH
                 #self.state_info = OnscreenText(text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1, fg=(1, 1, 1, 1), align=TextNode.ALeft, font=self.font) # Напишем сообщение о состоянии корабля
 
             self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)    
