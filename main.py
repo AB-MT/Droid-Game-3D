@@ -59,9 +59,9 @@ import socket
 # For addons
 import json
 
-sites = ['github.com', 'panda3d.org', 'a3p.sf.net']
+sites = ['gitlab.com', 'panda3d.org', 'a3p.sf.net']
 
-config = json.load(open("./addon_config.json"))
+config = json.load(open("./RES/addon_config.json"))
 addon_classes = []
 for addon in config:
     if not config[addon]["disabled"]:
