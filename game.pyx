@@ -55,6 +55,7 @@ import logging
 from multiprocessing import Pool # хочу отметить этот модуль - он позволяет работать программе на разных потоках. Из-за этого игра достаточно оптимизирована
 from screeninfo import get_monitors
 import socket
+import pyximport; pyximport.install()
 
 # For addons
 import json
