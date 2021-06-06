@@ -59,7 +59,7 @@ Chat menu :
 ![image](https://imgur.com/YOgPWMT.png)
 Choose droid menu : 
 ![image](https://imgur.com/JZFhjsC.png)
-***In game screenshot***
+<h3>In game screenshot</h3>
 
 ![image](https://imgur.com/Hy2gQenl.png)
 
