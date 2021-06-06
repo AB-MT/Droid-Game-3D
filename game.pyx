@@ -682,6 +682,24 @@ class DroidShooter(ShowBase):
         )
         self.pg2663.setTransparency(0)
 
+        self.pg26632 = DirectButton(
+            frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+            hpr=LVecBase3f(0, 0, 0),
+            pos=LPoint3f(6.90, 0, 0),
+            scale=LVecBase3f(1, 1, 1),
+            text='3',
+            text_align=TextNode.A_center,
+            text_scale=(1, 1),
+            text_pos=(0, 0),
+            text_fg=LVecBase4f(0, 0, 0, 1),
+            text_bg=LVecBase4f(0, 0, 0, 0),
+            text_wordwrap=None,
+            parent=self.pg683,
+            command=self.three_level,
+            pressEffect=1,
+        )
+        self.pg2663.setTransparency(0)
+
     def one_level(self):
         # включение первого уровня
         self.level = load_level(LEVEL1)
@@ -692,6 +710,13 @@ class DroidShooter(ShowBase):
     def two_level(self):
         # включение второго уровня
         self.level = load_level(LEVEL2)
+        # удаляем элементы
+        self.pg149.hide()
+        self.menu(False) # включим menu
+
+    def three_level(self):
+        # включение третьего уровня
+        self.level = load_level(LEVEL3)
         # удаляем элементы
         self.pg149.hide()
         self.menu(False) # включим menu
@@ -1648,20 +1673,20 @@ class DroidShooter(ShowBase):
             #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
 
     def capture_flag_update(self, task):
-        self.result = self.capture_flag.update() # updating  capture flag
+        self.result = self.capture_flag.update() # обновляем результат захвата флага
         if self.result:
             print('You WIN!!!')
             self.exit()
 
     def check_swipe(self, task):
         '''проверяем удар по дроиду'''
-        if self.droid.getPos() == self.enemy.getPos():
+        if self.droid.getPos() == self.enemy.getPos(): # проверяем : если дроид игрока ударился об вражеского то...
             if not self.EN :
-                self.state_info.getText('сильный удар!')
+                self.state_info.getText('сильный удар!') # сообщение об ударе
             else :
                 self.state_info.getText('swipe!')
 
-            self.state_droid -= 5
+            self.state_droid -= 5 # вычитаем очки из жизней дроида
             self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
 
     
