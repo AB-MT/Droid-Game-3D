@@ -1564,6 +1564,7 @@ class DroidShooter(ShowBase):
                                          base_2=self.planet)
 
         taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")
+        taskMgr.add(self.check_swipe, "CheckingSwipeOnDroid")
 
         self.isMoving = False # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
         # Делаем так, чтобы свет был изначально выключен.
@@ -1651,6 +1652,18 @@ class DroidShooter(ShowBase):
         if self.result:
             print('You WIN!!!')
             self.exit()
+
+    def check_swipe(self):
+        '''проверяем удар по дроиду'''
+        if self.droid.getPos() == self.enemy.getPos():
+            if not self.EN :
+                self.state_info.getText('сильный удар!')
+            else :
+                self.state_info.getText('swipe!')
+
+            self.state_droid -= 5
+            self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
+
     
     def _grenade_boom(self):
         # играем звуки гранаты
