@@ -1908,7 +1908,7 @@ class DroidShooter(ShowBase):
                 self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
 
                 self.droid.setTexture(self.rust_texture) # накладываем ржавчину на дроида
-        self.weapon.setTexture(self.rust_texture) # накладываем ржавчмну на оружие
+                self.weapon.setTexture(self.rust_texture) # накладываем ржавчину на оружие
 
         else :
             if self.state != 100:
