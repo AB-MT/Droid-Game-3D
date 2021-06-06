@@ -126,6 +126,7 @@ elif '-d' in sys.argv:
 elif '-l' in sys.argv:
     downloading()
 
+# режим захвата флага
 class Capture_flag():
     def __init__(self, player, base_1, base_2):
         self.player = player
@@ -178,7 +179,7 @@ class DroidShooter(ShowBase):
 
         # Настраиваем окно
         self.props = WindowProperties() # класс настроек
-        self.props.setTitle('Droid Game release ' + VERSION) # заголовок окна
+        self.props.setTitle('Droid Game ' + VERSION) # заголовок окна
         self.props.setUndecorated(True) # убираем раму окна
         self.props.setSize(self.screen_width, self.screen_height) # размер окна
 
