@@ -41,7 +41,7 @@ class GUI:
             numItemsVisible=5,
             pos=LPoint3f(0.025, 0, -0.25),
             state='normal',
-            text='scrolled list',
+            text='',
             decButton_borderWidth=(0.005, 0.005),
             decButton_hpr=LVecBase3f(0, 0, 0),
             decButton_pos=LPoint3f(-0.45, 0, 0.03),
