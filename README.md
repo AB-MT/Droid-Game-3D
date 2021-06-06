@@ -18,9 +18,9 @@ At the moment, the most popular are the admin server and DOOMPY.<br><br>
 Admin fun server - 14 players per day.<br>
 DOOMPY - 12 players per day.<br>
 # Features
-Capture the flag mode.<br>
-New bots<br>
-New droids.<br>
+✓Сapture the flag mode.<br>
+✘New bots<br>
+✘New droids.<br>
 # Gameplay
 <h3>Control</h3>
 There are many different features in the game at the moment. You can study them all as follows:<br><br>
