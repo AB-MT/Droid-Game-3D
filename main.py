@@ -1631,6 +1631,7 @@ class DroidShooter(ShowBase):
         # все обьекты, не поддающиюся эффектам
         self.all_objects = self.objects + self.fragments + self.grenades + [self.sky, self.fighter, self.planet]
 
+        self.rust_texture = loader.loadTexture('./tex/rust.png') # загружаем текстуру ржавчины
 
         # Шейдеры
         GameApi.shaders(self, vert="./shaders/realistic/bloom.glsl", frag="./shaders/realistic/blur.glsl")
@@ -1904,7 +1905,10 @@ class DroidShooter(ShowBase):
                     self.state_info.setText('RUST!')
 
                 self.state_droid -= 10
-                self.state_droid_info.setText(str(self.state_droid))) # обновление состояния дроида
+                self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
+
+                self.droid.setTexture(self.rust_texture) # накладываем ржавчину на дроида
+        self.weapon.setTexture(self.rust_texture) # накладываем ржавчмну на оружие
 
         else :
             if self.state != 100:
