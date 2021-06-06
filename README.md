@@ -15,8 +15,8 @@ At the moment, the most popular are the admin server and DOOMPY.<br><br>
 
 <h3>Server statistics</h3> <br><br>
 
-Admin fun server - 14 players per day.<br>
-DOOMPY - 12 players per day.<br>
+Admin fun server - 19 players per day.<br>
+DOOMPY - 17 players per day.<br>
 # Features
 ✓Сapture the flag mode.<br>
 ✘New bots<br>
