@@ -1653,7 +1653,7 @@ class DroidShooter(ShowBase):
             print('You WIN!!!')
             self.exit()
 
-    def check_swipe(self):
+    def check_swipe(self, task):
         '''проверяем удар по дроиду'''
         if self.droid.getPos() == self.enemy.getPos():
             if not self.EN :
