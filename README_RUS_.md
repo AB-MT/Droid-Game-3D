@@ -26,12 +26,13 @@ DOOMPY - 17 игроков в день. <br>
 
 1. Загрузите игру <br>
 2. Распаковать архив как угодно <br>
-3. Введите пять команды для установки модулей в терминал: <br>
+3. Введите шесть команды для установки модулей в терминал: <br>
 <code> pip install panda3d </code> <br>
 <code> pip install ipgetter2 </code> <br>
 <code> pip install PySimpleGUI </code> <br>
 <code> pip install simplepbr </code> <br>
 <code> pip install pyperclip </code> <br>
+<code>pip install Cython</code><br>
 4. Откройте каталог с игрой <br>
 5. Найдите файл main.py <br>
 6. Запустите <br>
