@@ -96,7 +96,7 @@ def load_profile(filename_p):
         for line in f: # читаем линии в файле
             return line + str(random.randrange(0, 1500)) # возвращаем имя игрока
         
-USERNAME = load_profile('./profile.txt') # загружаем профиль
+USERNAME = load_profile('./RES/profile.txt') # загружаем профиль
 
 # start client on server
 def start_client():
