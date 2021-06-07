@@ -15,3 +15,10 @@ SERVER_USER = IP_USER + ':' + DEFAULT_PORT # айпи и порт сервера
 LEVEL1 = './levels/level1.txt' # первый уровень
 LEVEL2 = './levels/level2.txt' # второй уровень
 LEVEL3 = './levels/level3.txt' # третий уровень
+
+# шрифты
+arial = './fonts/arial.ttf' # arial шрифт
+doom_font = './fonts/doom_font.ttf' # doom font шрифт
+ubunutumonobi = './fonts/UbuntuMono-BI.ttf' # UbunutuMono-BI шрифт
+iAWriterDuoSBold = './fonts/iAWriterDuoS-Bold.ttf' # да что вы от меня хотите? сами видите как переменная называется, значит такой шрифт
+VictorMonoBoldItalic = './fonts/VictorMono-BoldItalic.ttf' #  VictorMono-BoldItalic шрифт
