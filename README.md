@@ -2,7 +2,7 @@
 
 [на русском](https://gitlab.com/polskiychel/droidgame3d/-/blob/main/README_RUS_.md)
 
-### Droid Game 3D
+# Droid Game 3D
 This is a very interesting game in which you can fight droid bots and online with other players. Unite in teams, and arrange a capture of the flag.<br><br>
 
 # Some information about the game
