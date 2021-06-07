@@ -50,7 +50,7 @@ import time
 from datetime import datetime
 import os
 import math
-import simplepbr # simple PBR light.
+import simplepbr # Простое pbr освещение
 import logging
 from multiprocessing import Pool # хочу отметить этот модуль - он позволяет работать программе на разных потоках. Из-за этого игра достаточно оптимизирована
 from screeninfo import get_monitors
