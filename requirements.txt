@@ -4,3 +4,4 @@ ipgetter2
 screeninfo
 simplepbr
 pyperclip
+Cython
