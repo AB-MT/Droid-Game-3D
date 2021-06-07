@@ -1,6 +1,8 @@
 [![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/DroidGame/DroidGame3D?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [original readme](https://gitlab.com/polskiychel/droidgame3d/-/blob/main/README.md)
+
+![image](https://gitlab.com/polskiychel/droidgame3d/-/raw/main/logo.png)
 # Droid Game 3D
 Это очень интересная игра, в которой вы можете сражаться с ботами-дроидами и онлайн с другими игроками. Объединяйтесь в команды и устройте захват флага. <br> <br>
 
