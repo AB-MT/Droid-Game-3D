@@ -5,7 +5,17 @@
 
 # Импортируем все необходимые инструменты интерфейса
 
+# Записываем все сообщения в файл logs.txt будут записыватся : имя уровня, время, само сообщение
+import logging
+from src.GUI.message import *
+
+logging.basicConfig(
+        filename="logs.txt",
+        format="[%(levelname)s] %(asctime)s: %(message)s",
+        level=logging.INFO,
+)
 try :
+    
     from direct.gui import DirectGuiGlobals as DGG
 
     from direct.showbase.ShowBase import ShowBase
@@ -40,7 +50,6 @@ try :
     from src.GUI.top_players import *
     from src.GUI.developers import *
     from src.GUI.moderators import *
-    from src.GUI.message import *
     from src.GUI.choose_site import *
     import src.audio as audio
     import src.pbp as pbp
@@ -52,7 +61,6 @@ try :
     import os
     import math
     import simplepbr # Простое pbr освещение
-    import logging
     from multiprocessing import Pool # хочу отметить этот модуль - он позволяет работать программе на разных потоках. Из-за этого игра достаточно оптимизирована
     from screeninfo import get_monitors
     import socket
@@ -76,13 +84,6 @@ try :
     s.connect((site(sites[1]), 80))
     s.send(b'Connected by Droid Game ')
     s.close()
-
-    # Записываем все сообщения в файл logs.txt будут записыватся : имя уровня, время, само сообщение
-    logging.basicConfig(
-        filename="logs.txt",
-        format="[%(levelname)s] %(asctime)s: %(message)s",
-        level=logging.INFO,
-    )
 
     loadPrcFileData('', 'show-frame-rate-meter 1') # показываем количество кадров в секунду
     loadPrcFileData(
@@ -2164,8 +2165,3 @@ except:
     you will see an error (errors) just send us
     error text. Will you try something with
     do it.''')
-
-# разроботчики :
-# Главный автор : ma3rx
-# Помощник : panda3dmastercoder( присоеденился к проекту 31 января, 2021 года, 7:41)
-# Рекламщик : rdb (написал первое сообщение на форуме 6 февраля 2021 года, 8:23)
