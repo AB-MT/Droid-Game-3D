@@ -138,7 +138,7 @@ try :
             
             self.player_pos = self.player.getPos()
             self.base_1_pos = base_1.getPos()
-            self.base_21_pos = base_2.getPos()
+            self.base_2_pos = base_2.getPos()
 
         def update(self):
             self.player_pos = self.player.getPos()
@@ -151,7 +151,6 @@ try :
             if self.player_pos == self.base_1_pos:
                 return False
             
-
     # Создадим главный класс нашей игры
     class DroidShooter(ShowBase):
         def __init__(self):
@@ -177,7 +176,50 @@ try :
                 self.screen_height = monitor.height - 400
 
             self.menu(False) # зaпуск меню
+
+        def weapon_menu___init__(self, rootParent=None):
+            global weapon_choosed
             
+            self.pg149 = DirectButton(
+                borderWidth=(0.2, 0.7),
+                frameColor=(0.9, 0.85, 0.876, 0.5),
+                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0.8, 0, 0.675),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Pistol',
+                text_align=TextNode.A_center,
+                text_scale=(0.5, 1.0),
+                text_pos=(0, 0),
+                text_fg=LVecBase4f(0, 0, 0, 1),
+                text_bg=LVecBase4f(0, 0, 0, 0),
+                text_wordwrap=None,
+                parent=rootParent,
+                pressEffect=1,
+                command=self.pistol_choosed
+            )
+            self.pg149.setTransparency(0)
+
+            weapon_choosed = True
+
+        def pistol_choosed(self):
+            global weapon_choosed
+            
+            weapon_choosed = False
+
+        def check_weapon(self):
+            return self.weapon_choosed
+                
+        
+        def weapon_menu_show(self):
+            self.pg149.show()
+
+        def weapon_menu_hide(self):
+            self.pg149.hide()
+
+        def weapon_menu_destroy(self):
+            self.pg149.destroy()
+        
         def menu(self, menu, rootParent=None):
 
             # Настраиваем окно
@@ -1466,10 +1508,14 @@ try :
 
             # if no single mode
             if not self.single:
-                start_client() # starting client
+                start_client() # запуск клиента
+                
             # удаляем глобус, если не выходили из игры
             if not self.exiting:
                 del self.globe
+
+            # меню оружий
+            self.weapon_menu___init__()
 
             self.intro_sound.play() # играем звук интро
 
@@ -1524,7 +1570,7 @@ try :
             self.sword_pos = self.droid.getX(), self.droid.getY() + 0.1, 1 # Позиция пушки
             
             # Используем мультипроцесинг, чтобы оптимизировать нашу игру.
-            with Pool(processes=6) as pool:
+            with Pool(processes=10) as pool:
             
                 self.weapon = GameApi.object(self, './models/BasicDroid/sniper.egg', .5, self.weapon_pos) # загрузим оружие
                 
@@ -1581,7 +1627,8 @@ try :
             self.p = ParticleEffect() # Включим эффект дыма
             self.accept('f', self.particle_start) # при нажатии f(от force) -  загрузим файл дыма и переместим в конфиг чтобы именно эта анимация стала отображением дыма
             self.accept('0', self.fountain) # при  нажатии кнопок f+o(fountain) включим пожаротушительную систему
-            self.accept('f3', self.toggleWireframe) # при нажатии f3 - включаем полигольный режим
+            if self.single: # если мы находимся в диночной игре, то можно включать полигольный режим.
+                self.accept('f3', self.toggleWireframe) # при нажатии f3 - включаем полигольный режим
             self.accept('r', base.useTrackball) # если нажали r - делаем RPG режим.
 
             taskMgr.add(self.move, "moveTask") # Добавляем задачу в наш движок
@@ -1592,6 +1639,7 @@ try :
 
             taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")
             taskMgr.add(self.check_swipe, "CheckingSwipeOnDroid")
+            taskMgr.add(self.check_weapon_update, "checkweaponupdate")
 
             self.isMoving = False # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
             # Делаем так, чтобы свет был изначально выключен.
@@ -1632,7 +1680,7 @@ try :
                             self.cube, self.crosshair]
             
             # все графические обьекты
-            self.gui_objects = [self.state_info]
+            self.gui_objects = [self.state_info, self.state_droid_info, self.state_info2]
 
             # если не включили одиночную игру, добавляем в список графических обьектов кнопку чата
             if not self.single:
@@ -1674,6 +1722,15 @@ try :
                 GameApi.shaders(self, "./shaders/lighting.vert", "./shaders/lighting.frag") # теперь шейдеры работают!
                 #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
 
+        def check_weapon_update(self, task):
+            '''функция для проверки выбора оружия'''
+            #self.weapon_choosed = self.weapons_gui.check_weapon() # проверяем выбранное оружие
+            if not weapon_choosed : # проверим, если выбрали пистолет
+                self.weapon.hide() # удаляем прередущие оружие
+                self.weapon = GameApi.object(self, './models/BasicDroid/pistol.egg', .5, self.weapon_pos) # обновим оружие
+                
+            
+        
         def capture_flag_update(self, task):
             self.result = self.capture_flag.update() # обновляем результат захвата флага
             if self.result:
@@ -2044,7 +2101,7 @@ try :
             self.camera.setPos(self.weapon.getX(), self.weapon.getY(), self.weapon.getZ())
 
         def easy_exit(self):
-            # обычяеый выход(из меню)
+            # обычный выход(из меню)
             self.click_sound.play() # играем звук клика
             self.command_sound.play() # играем звук команды
             sys.exit() # просто системно выходим.
@@ -2064,8 +2121,11 @@ try :
                 o.hide()
             for g in self.gui_objects: # удаляем все графтческие обьекты
                 g.hide()
+                
+            self.weapons_gui.destroy() # удаляем меню оружий
+            
             self.menu(True) # выходим в меню
-
+        
         def setKey(self, key, value):
             self.keyMap[key] = value # Делаем мехaнuзм нажатия клавиш.
 
