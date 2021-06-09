@@ -158,9 +158,10 @@ try :
             self.speed = 100 # скорость двигателя
             self.GB = False # НЕ чёрно-белый режим
             self.EN = False # Не будем включать английский язык
-            self.basic_droid = True
-            self.pod_droid = False
-            self.shield_droid = False
+            self.rust_effect = False # Поставим, что дроид не ржавый
+            self.basic_droid = True # включаем стандартного дроида
+            self.pod_droid = False # не включаем большого дроида
+            self.shield_droid = False # не включаем щитного дроида
             self.pro_machine = False # Не включаем проффесиональное управление
             self.single = False # Не включаем одиночную игру
             self.sun_interval = 80 # Интервал солнца
@@ -171,9 +172,10 @@ try :
 
             self.level = load_level(LEVEL1) # уровень по умолчанию
             
+            # проходимся по всем мониторам(у многих программистов их два, но если он у вас один, всё всё равно будет работать)
             for monitor in get_monitors():
-                self.screen_width = monitor.width - 700
-                self.screen_height = monitor.height - 400
+                self.screen_width = monitor.width - 700 # делаем новый размер окна по ширине
+                self.screen_height = monitor.height - 400 # делаем новый размер окна по высоте
 
             self.menu(False) # зaпуск меню
 
@@ -1998,12 +2000,15 @@ try :
                 self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)    
                 GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos, self.environ)
                 if self.fountain_pos == self.droid.getPos():
+                    self.rust_effect = True # включаем эффект ржавчины
+                    # если не включен английский язык
                     if not self.EN:
-                        self.state_info.setText('РЖАВЧИНА!')
+                        self.state_info.setText('РЖАВЧИНА!') # сообщение на русском
+                    # если включен английский язык
                     else:
-                        self.state_info.setText('RUST!')
+                        self.state_info.setText('RUST!') # сообщение на русском
 
-                    self.state_droid -= 10
+                    self.state_droid -= 10 # отнимаем здоровье у дроида
                     self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
 
                     self.droid.setTexture(self.rust_texture) # накладываем ржавчину на дроида
@@ -2145,20 +2150,34 @@ try :
             startpos = self.droid.getPos() # Сделаем удобную переменную позиции игрока
 
             if self.keyMap["left"]:
-                self.droid.setH(self.droid.getH() + 145 * dt)
-                self.crosshair.setH(self.crosshair.getH() + 145 * dt)
-                self.weapon.setH(self.weapon.getH() + 145 * dt)
-                self.enemy.setY(self.enemy, 1 * dt )
+                if not self.rust_effect:
+                    self.droid.setH(self.droid.getH() + 145 * dt)
+                    self.crosshair.setH(self.crosshair.getH() + 145 * dt)
+                    self.weapon.setH(self.weapon.getH() + 145 * dt)
+                    self.enemy.setY(self.enemy, -1 * dt)
+
+                if self.rust_effect : # если дроид заржавел, ...
+                    self.droid.setH(self.droid.getH() + 85 * dt)
+                    self.crosshair.setH(self.crosshair.getH() + 85 * dt)
+                    self.weapon.setH(self.weapon.getH() + 85 * dt)
+                    self.enemy.setY(self.enemy, -1 * dt)
 
                 # движение врагов
                 for e in self.enemies:
                     bot(enemy=e, dt=dt)
                 
             if self.keyMap["right"]:
-                self.droid.setH(self.droid.getH() - 145 * dt)
-                self.crosshair.setH(self.crosshair.getH() - 145 * dt)
-                self.weapon.setH(self.weapon.getH() - 145 * dt)
-                self.enemy.setY(self.enemy, -1 * dt)
+                if not self.rust_effect:
+                    self.droid.setH(self.droid.getH() - 145 * dt)
+                    self.crosshair.setH(self.crosshair.getH() - 145 * dt)
+                    self.weapon.setH(self.weapon.getH() - 145 * dt)
+                    self.enemy.setY(self.enemy, -1 * dt)
+
+                if self.rust_effect : # если дроид заржавел, ...
+                    self.droid.setH(self.droid.getH() - 85 * dt)
+                    self.crosshair.setH(self.crosshair.getH() - 85 * dt)
+                    self.weapon.setH(self.weapon.getH() - 85 * dt)
+                    self.enemy.setY(self.enemy, -1 * dt)
 
                 # движение врагов
                 for e in self.enemies:
@@ -2170,6 +2189,12 @@ try :
                     self.crosshair.setY(self.crosshair, -25 * dt) # перемещаем круг над дроидом
                     self.enemy.setX(self.enemy, 1 * dt) # перемещаем врага
                     self.check_win() # Проверяем победу
+
+                    if self.rust_effect : # если дроид заржавел, ...
+                        self.droid.setY(self.droid, -10 * dt) # перемещаем дроида
+                        self.crosshair.setY(self.crosshair, -10 * dt) # перемещаем круг над дроидом
+                        self.enemy.setX(self.enemy, 1 * dt) # перемещаем врага
+                        self.check_win() # Проверяем победу
 
                 else :
                     self.droid.setY(self.droid, -55 * dt)
