@@ -1642,6 +1642,7 @@ try :
             taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")
             taskMgr.add(self.check_swipe, "CheckingSwipeOnDroid")
             taskMgr.add(self.check_weapon_update, "checkweaponupdate")
+            taskMgr.add(self.engine_treshiny_check, "TreshinyWithEngineChecking")
 
             self.isMoving = False # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
             # Делаем так, чтобы свет был изначально выключен.
@@ -1712,6 +1713,7 @@ try :
             self.all_objects = self.objects + self.fragments + self.grenades + [self.sky, self.fighter, self.planet]
 
             self.rust_texture = loader.loadTexture('./tex/rust.png') # загружаем текстуру ржавчины
+            self.treshiny_texture = loader.loadTexture('./tex/treshiny.png') # загружаем текстуру трещин
 
             # Шейдеры
             GameApi.shaders(self, vert="./shaders/realistic/bloom.glsl", frag="./shaders/realistic/blur.glsl")
@@ -1724,6 +1726,11 @@ try :
                 GameApi.shaders(self, "./shaders/lighting.vert", "./shaders/lighting.frag") # теперь шейдеры работают!
                 #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
 
+        def engine_treshiny_check(self, task):
+            '''функция для проверки корабля на трещины'''
+            if self.environ.getPos() == self.planet.getPos(): # если корабль врезался в планету...
+                self.environ.setTexture(self.treshiny_texture) # накладываем на него текстуру трещин
+        
         def check_weapon_update(self, task):
             '''функция для проверки выбора оружия'''
             #self.weapon_choosed = self.weapons_gui.check_weapon() # проверяем выбранное оружие
