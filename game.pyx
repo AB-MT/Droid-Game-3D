@@ -7,6 +7,7 @@
 
 # Записываем все сообщения в файл logs.txt будут записыватся : имя уровня, время, само сообщение
 import logging
+import game
 from src.GUI.message import *
 
 logging.basicConfig(
@@ -1546,25 +1547,25 @@ try :
             self.environ = loader.loadModel("./models/world/falcon.egg") # Загрузим уже созданный в blender мир.
             self.environ.reparentTo(render) # Загружаем модель мира в окно
 
-            droidStartPos = (-1, 0, 1.5 ) # Загружаем стартовую позицию игрока в мире.
-            enemyStartPos = LVecBase3f(float(self.level[0]), float(self.level[1]), float(self.level[2])) # Загружаем позицию помощника-дроида.
+            self.droidStartPos = (-1, 0, 1.5 ) # Загружаем стартовую позицию игрока в мире.
+            self.enemyStartPos = LVecBase3f(float(self.level[0]), float(self.level[1]), float(self.level[2])) # Загружаем позицию помощника-дроида.
 
             if not self.another_camera:
                 if self.basic_droid:
-                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid.egg", 1, droidStartPos) # Загружаем модель игрока (созданная в blender)
+                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid.egg", 1, self.droidStartPos) # Загружаем модель игрока (созданная в blender)
                 elif self.pod_droid :
-                    self.droid = GameApi.object(self, "./models/pod/pod.egg", 0.5, droidStartPos)
+                    self.droid = GameApi.object(self, "./models/pod/pod.egg", 0.5, self.droidStartPos)
 
                 elif self.shield_droid:
                     self.shield_sound.play() # играем звук щита.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid-lowres.egg", 1, droidStartPos)
+                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid-lowres.egg", 1, self.droidStartPos)
 
             else:
                 self.droid = render.attachNewNode("body")
-                self.droid.setPos(droidStartPos)
+                self.droid.setPos(self.droidStartPos)
                 base.cam.reparentTo(self.droid)
                     
-            self.enemy = GameApi.object(self, "./models/pod/pod.egg", 0.5, enemyStartPos) # Загружаем модель помощника (созданная в blender)
+            self.enemy = GameApi.object(self, "./models/pod/pod.egg", 0.5, self.enemyStartPos) # Загружаем модель помощника (созданная в blender)
             if self.single:
                 self.enemy.hide()
 
@@ -1579,7 +1580,7 @@ try :
                 self.bullet = GameApi.object(self, './models/spike/spike.egg', .5, (0, 0, 0)) # Загрузим пулю
                 self.flash = GameApi.object(self, './models/whishlyflash/handlamp.egg', .5, (0, 0, 0)) # Загрузим фонарик
                 self.planet = GameApi.object(self, './models/pod/pod.egg', 50, (0, -1000, 0))
-                self.crosshair = GameApi.object(self, './models/crosshair/crosshair.egg', 1, (droidStartPos))
+                self.crosshair = GameApi.object(self, './models/crosshair/crosshair.egg', 1, (self.droidStartPos))
                 self.grenade = GameApi.object(self, './models/grenade/Grenade.egg', 1, (3, 3, 0.3))
                 self.fragment = GameApi.object(self, './models/fragment/Fragment.egg', 1, (5, 3, 0.3))
 
@@ -1738,13 +1739,11 @@ try :
                 self.weapon.hide() # удаляем прередущие оружие
                 self.weapon = GameApi.object(self, './models/BasicDroid/pistol.egg', .5, self.weapon_pos) # обновим оружие
                 
-            
-        
         def capture_flag_update(self, task):
             self.result = self.capture_flag.update() # обновляем результат захвата флага
-            if self.result:
-                print('You WIN!!!')
-                self.exit()
+            if self.result: # проверяем результат
+                print('You WIN!!!') # печатаем результат
+                self.start_new_game() # запускаем новую игру
 
         def check_swipe(self, task):
             '''проверяем удар по дроиду'''
@@ -1757,6 +1756,11 @@ try :
                 self.state_droid -= 5 # вычитаем очки из жизней дроида
                 self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
 
+        def start_new_game(self):
+            '''запуск новой игры'''
+            self.droid.setPos(self.droidStartPos) # ставим обычную позицию дроида
+            self.droid.setPos(self.enemyStartPos) # ставим обычную позицию врага
+            
         
         def _grenade_boom(self):
             # играем звуки гранаты
