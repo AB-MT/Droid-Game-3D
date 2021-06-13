@@ -9,7 +9,7 @@ This is a very interesting game in which you can fight droid bots and online wit
 
 # Some information about the game
 
-At the moment the game is on beta 9.2.7 There may be some crashes in the beta version, if this happens write to us!
+At the moment the game is on beta 9.2.8 There may be some crashes in the beta version, if this happens write to us!
 
 <h3>Popular servers</h3> <br><br>
 
