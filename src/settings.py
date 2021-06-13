@@ -12,9 +12,9 @@ DEFAULT_PORT = '1337' # Порт по умолчанию
 DEFAULT_SERVER = DEFAULT_IP + ':' + DEFAULT_PORT # сервер по умолчанию
 SERVER_USER = IP_USER + ':' + DEFAULT_PORT # айпи и порт сервера, если его создаст игрок
 
-LEVEL1 = './levels/level1.txt' # первый уровень
-LEVEL2 = './levels/level2.txt' # второй уровень
-LEVEL3 = './levels/level3.txt' # третий уровень
+LEVEL1 = './levels/maps/Default/level1.txt' # первый уровень
+LEVEL2 = './levels/maps/Default/level2.txt' # второй уровень
+LEVEL3 = './levels/maps/Default/level3.txt' # третий уровень
 
 # шрифты
 arial = './fonts/arial.ttf' # arial шрифт
