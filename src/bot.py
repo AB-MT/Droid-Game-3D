@@ -1,6 +1,8 @@
-# ИИ ботов
-
+# Боты
+import random
 def bot(enemy, dt):
-    enemy.setX(enemy, 1 * dt ) # перемещаем врага
+    # по разному...
+    if random.randrange(0, 1):
+        enemy.setX(enemy, 1 * dt ) # перемещаем врага
 
     return enemy.getPos() # возвращаем позицию врага
