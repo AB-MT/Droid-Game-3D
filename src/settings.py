@@ -2,7 +2,7 @@
 import src.ipgetter as ipgetter
 # Настройки, информция
 
-VERSION = 'beta 9.3.0' # версия
+VERSION = 'Release 1.0' # версия
 COPYRIGHT = 'Mark Kim 2021' # автор, год создания
 DEVELOP_MODE = False # не включаем режим разроботчика
 DEFAULT_IP = '127.0.0.1' # IP по умолчанию
