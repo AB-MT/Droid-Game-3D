@@ -6,15 +6,14 @@
 # Импортируем все необходимые инструменты интерфейса
 
 # Записываем все сообщения в файл logs.txt будут записыватся : имя уровня, время, само сообщение
-import logging
-import game
-from src.GUI.message import *
+import logging # имортируем модуль, который будет записывать все проблеы в файл
+from src.GUI.message import * # импортируем интерфейс сообщений.
 
 logging.basicConfig(
         filename="logs.txt",
         format="[%(levelname)s] %(asctime)s: %(message)s",
         level=logging.INFO,
-)
+) # записываем все проблемы в файл
 try :
     
     from direct.gui import DirectGuiGlobals as DGG
