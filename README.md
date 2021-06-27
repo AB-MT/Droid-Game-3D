@@ -9,7 +9,7 @@ This is a very interesting game in which you can fight droid bots and online wit
 
 # Some information about the game
 
-At the moment the game is on release 1.0, snapshot N1. There may be some crashes in the beta version, if this happens write to us!
+At the moment the game is on release 1.0, snapshot N1. 
 
 <h3>Popular servers</h3> <br><br>
 
