@@ -202,24 +202,24 @@ try :
             )
             self.pg149.setTransparency(0)
 
-            weapon_choosed = True
+            weapon_choosed = True # выбрано ли оружие? ДА!
 
-        def pistol_choosed(self):
+        def pistol_choosed(self): # если выбран пистолет
             global weapon_choosed
             
             weapon_choosed = False
 
-        def check_weapon(self):
+        def check_weapon(self): # проверка : выбрано ли оружие
             return self.weapon_choosed
                 
         
-        def weapon_menu_show(self):
+        def weapon_menu_show(self): # показать меню
             self.pg149.show()
 
-        def weapon_menu_hide(self):
-            self.pg149.hide()
+        def weapon_menu_hide(self): # скрыть меню
 
-        def weapon_menu_destroy(self):
+        def weapon_menu_destroy(self): # скрыть обьекты меню
+
             self.pg149.destroy()
         
         def menu(self, menu, rootParent=None):
