@@ -1,6 +1,7 @@
 [![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/DroidGame/DroidGame3D?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [original readme](https://gitlab.com/polskiychel/droidgame3d/-/blob/main/README.md)
+[itch.io страница](https://ma3rx.itch.io/droid-game-3d)
 
 ![image](https://gitlab.com/polskiychel/droidgame3d/-/raw/main/logo.png)
 # Droid Game 3D
