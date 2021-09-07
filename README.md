@@ -77,3 +77,6 @@ Thank you <a href="https://discourse.panda3d.org/u/wezu"> wezu </a> for the wond
 I used it to create a menu.
 Thanks also <a href="https://discourse.panda3d.org/u/et1337"> et1337 </a> (<a href="https://github.com/etodd"> ettod </a>) for games a3p.
 From there I took the planet model and menu system. Unfortunately, at the moment a3p is going through a difficult time. You can [support](https://github.com/etodd/a3p) this project. Never mind that the last commit was in 2012. Yes, this is a very old game, but you can still play it by downloading it from the [official game site](http://a3p.sf.net/)
+
+# Another sites
+<iframe src="https://itch.io/embed/1188941?bg_color=070707&amp;fg_color=327345&amp;link_color=327345&amp;border_color=fb922b" frameborder="0" width="552" height="167"><a href="https://ma3rx.itch.io/droid-game-3d">Droid Game 3D by MA3RX</a></iframe>
