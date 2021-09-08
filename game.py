@@ -78,12 +78,12 @@ try :
             exec("from addons." + addon + ".main  import *")
             addon_classes.append(config[addon]["main_class"])
 
-    message(message='For playing check you internet!') # message
-    # connect to site
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    s.connect((site(sites[1]), 80))
-    s.send(b'Connected by Droid Game ')
-    s.close()
+    message(message='For playing check you internet!') # сообщение
+    # подключение к серверу
+    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # создаем обьект сервера
+    s.connect((site(sites[1]), 80)) # подключаемся к серверу
+    s.send(b'Connected by Droid Game ') # посылаем на сервер сообщение о входе в игру
+    s.close() # закрываем рассылку сообщения
 
     loadPrcFileData('', 'show-frame-rate-meter 1') # показываем количество кадров в секунду
     loadPrcFileData(
