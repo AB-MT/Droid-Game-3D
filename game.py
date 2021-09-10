@@ -78,20 +78,20 @@ try :
             exec("from addons." + addon + ".main  import *")
             addon_classes.append(config[addon]["main_class"])
 
-    message(message='For playing check you internet!') # сообщение
+    message(message='') # сообщение
     # подключение к серверу
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # создаем обьект сервера
+    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # создаем обьект портала для подключения
     s.connect((site(sites[1]), 80)) # подключаемся к серверу
-    s.send(b'Connected by Droid Game ') # посылаем на сервер сообщение о входе в игру
-    s.close() # закрываем рассылку сообщения
+    s.send(b'Connected by Droid Game ') # посылаем на сервер сообщение на сервер
+    s.close() # отключаем посылание на сервер, чтобы сервер не подумал что это разные игроки. Да, способ наитупейший, но рабочий!
 
-    loadPrcFileData('', 'show-frame-rate-meter 1') # показываем количество кадров в секунду
+    loadPrcFileData('', 'show-frame-rate-meter true') # показываем количество кадров в секунду
     loadPrcFileData(
         "",
         "audio-library-name "
         + ("p3openal_audio" if sys.platform == "linux" else "p3fmod_audio"),
     ) # система звука в зависимости от вашей ОС
-    loadPrcFileData("", "threading-model Cull/Draw") # используем Render Pipeline(https://github.com/tobspr/RenderPipeline) для большей риалистичности
+    loadPrcFileData("", "threading-model Cull/Draw") # используем много процессорный Render Pipeline(https://github.com/tobspr/RenderPipeline) для большей риалистичности
 
     def load_profile(filename_p):
         '''загружаем профиль'''
@@ -101,13 +101,13 @@ try :
             
     USERNAME = load_profile('./RES/profile.txt') # загружаем профиль
 
-    # start client on server
+    # старт клиента сервера
     def start_client():
-        worldClient = Client(9099,ipgetter.myip())
-        N = PlayerReg()
-        keys = Keys()
-        w = World()
-        chatReg = chatRegulator(worldClient,keys)
+        worldClient = Client(9099,ipgetter.myip()) # подключение к миру и получение айпи
+        N = PlayerReg() # регистрация игрока в мире
+        keys = Keys() # клавиши
+        w = World() # мир
+        chatReg = chatRegulator(worldClient,keys) # рега чата
 
     def showHelpInfo():
         # Говорим пользователю об использованию
@@ -202,24 +202,24 @@ try :
             )
             self.pg149.setTransparency(0)
 
-            weapon_choosed = True # выбрано ли оружие? ДА!
+            weapon_choosed = True
 
-        def pistol_choosed(self): # если выбран пистолет
+        def pistol_choosed(self):
             global weapon_choosed
             
             weapon_choosed = False
 
-        def check_weapon(self): # проверка : выбрано ли оружие
+        def check_weapon(self):
             return self.weapon_choosed
                 
         
-        def weapon_menu_show(self): # показать меню
+        def weapon_menu_show(self):
             self.pg149.show()
 
-        def weapon_menu_hide(self): # скрыть меню
+        def weapon_menu_hide(self):
+            self.pg149.hide()
 
-        def weapon_menu_destroy(self): # скрыть обьекты меню
-
+        def weapon_menu_destroy(self):
             self.pg149.destroy()
         
         def menu(self, menu, rootParent=None):
