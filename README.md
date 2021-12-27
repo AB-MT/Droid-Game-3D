@@ -38,31 +38,24 @@ There are many different features in the game at the moment. You can study them 
 7.  In the menu, click on help.<br>
 Learn the controls and play!<br>
 
-# Some screenshots
-***Menu screenshots :***
+# Support for CUDA video cards
+If your **Nvidia** video card(GPU) allows - the program will use it itself, doing its best to optimize your gameplay, which, as you might have guessed, will be exciting and interesting.
 
-Main menu :
-![image](https://imgur.com/wcmLLc7.png)
-Moderators menu :
-![image](https://imgur.com/O1ZUTWr.png)
-Developers menu :
-![image](https://imgur.com/tCJVwdM.png)
-Top players menu :
-![image](https://imgur.com/JYbM2H5.png)
-Tutorial menu :
-![image](https://imgur.com/OkVvz4N.png)
-Connect server menu :
-![image](https://imgur.com/t8ksyv5.png)
-Chat menu :
-![image](https://imgur.com/YOgPWMT.png)
-Choose droid menu : 
-![image](https://imgur.com/JZFhjsC.png)
-<h3>In game screenshot</h3>
+# What is used to optimize the game?
+To optimize our game, we use the following advantages of Python over other languages:
+1. Using Numba (CUDA supported, fast math mode).
+2. Multithreading (work on different threads)
+3. AsyncIO (multiple tasks in one thread)
+4. Multiprocessing (several processors communicating with each other on RAM).
+5. Avoiding * for * loops
+6. Clearing the map from unnecessary objects
 
-![image](https://imgur.com/Hy2gQenl.png)
 
-That's screenshot made in online mode. 
-This screenshot does not show everything you can do in the game. (Server: DOOMPY)
+# First release
+The first release will be released on December 31st. Wait;)
+I will add many useful features and optimize the game.
+
+
 
 # Thanks
 Special thanks to <a href="https://discourse.panda3d.org/u/panda3dmastercoder"> panda3dmastercoder </a>.
