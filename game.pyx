@@ -6,120 +6,207 @@
 # Импортируем все необходимые инструменты интерфейса
 
 # Записываем все сообщения в файл logs.txt будут записыватся : имя уровня, время, само сообщение
-import logging # имортируем модуль, который будет записывать все проблеы в файл
-from src.GUI.message import * # импортируем интерфейс сообщений.
+import logging  # имортируем модуль, который будет записывать все проблемы в файл
+from src.GUI.message import *  # импортируем интерфейс сообщений.
 
 logging.basicConfig(
-        filename="logs.txt",
-        format="[%(levelname)s] %(asctime)s: %(message)s",
-        level=logging.INFO,
-) # записываем все проблемы в файл
-try :
-    
-    from direct.gui import DirectGuiGlobals as DGG
+    filename="logs.txt",
+    format="[%(levelname)s] %(asctime)s: %(message)s",
+    level=logging.INFO,
+)  # записываем все проблемы в файл
 
-    from direct.showbase.ShowBase import ShowBase
-    from direct.particles.ParticleEffect import ParticleEffect
-    from direct.gui.OnscreenImage import OnscreenImage
-    from direct.gui.OnscreenText import OnscreenText
-    from direct.interval.IntervalGlobal import *
 
-    from direct.gui.DirectScrolledList import DirectScrolledList
-    from direct.gui.DirectScrolledList import DirectScrolledListItem
-    from direct.gui.DirectScrolledFrame import DirectScrolledFrame
+# только в случае ошибки
+def only_for_error():
+    global IP_USER_, DEFAULT_PORT_, VERSION_  # глобальные айпи, порт, версия
 
-    from direct.gui.DirectDialog import OkDialog
-    from direct.gui.DirectButton import DirectButton
-    from direct.gui.DirectLabel import DirectLabel
-    from direct.gui.DirectEntry import DirectEntry
-    from direct.gui.DirectSlider import DirectSlider
+    IP_USER_ = ipgetter.myip()  # айпи
+    DEFAULT_PORT_ = 9099  # порт
+    VERSION_ = VERSION  # версия
 
-    from direct.distributed.PyDatagram import PyDatagram # PyDatagram - простой встроенный модуль в движок для создания онлайна
+
+try:
+
+    # встроенные в графических движка элементы
+    from direct.gui import DirectGuiGlobals as DGG  # глобалы
+
+    from direct.showbase.ShowBase import ShowBase  # инициализация графичиских элементов
+    from direct.particles.ParticleEffect import ParticleEffect  # эффет партиклов(дым, пар, огонь, вода и т. д.)
+    from direct.gui.OnscreenImage import OnscreenImage  # изображение на экране
+    from direct.gui.OnscreenText import OnscreenText  # текст на экране
+    from direct.interval.IntervalGlobal import *  # интервал вращение объекта
+
+    from direct.gui.DirectScrolledList import DirectScrolledList  # прокручивающееся список
+    from direct.gui.DirectScrolledList import DirectScrolledListItem  # элемент такого списка
+    from direct.gui.DirectScrolledFrame import DirectScrolledFrame  # прокручивающающаяся рамка
+
+    from direct.gui.DirectDialog import OkDialog  # диалог с кнопкой "ок"
+    from direct.gui.DirectButton import DirectButton  # кнопка
+    from direct.gui.DirectLabel import DirectLabel  # метка
+    from direct.gui.DirectEntry import DirectEntry  # ввод
+    from direct.gui.DirectSlider import DirectSlider  # слайдер
+    from direct.gui.DirectCheckBox import DirectCheckBox  # галочка
+
+    from direct.distributed.PyDatagram import \
+        PyDatagram  # PyDatagram - простой встроенный модуль в движок для создания онлайна
 
     # Ну, вот, импортируем panda3d(игр. движ.) ну и мой небольшой API к нему - marconit_engine
-    from online.client import *
-    from panda3d.core import *
-    from src.marconit_engine import *
-    from src.bot import bot
-    from src.net import *
-    from src.parsers.loading_levels import *
-    from src.parsers.download_levels import downloading
-    from src.settings import *
-    import src.gui as gui
-    from src.GUI.choose_server import *
-    from src.GUI.top_players import *
-    from src.GUI.developers import *
-    from src.GUI.moderators import *
-    from src.GUI.choose_site import *
-    import src.audio as audio
-    import src.pbp as pbp
-    import src.ipgetter as ipgetter
-    import random
-    import sys
-    import time
-    from datetime import datetime
-    import os
-    import math
-    import simplepbr # Простое pbr освещение
-    from multiprocessing import Pool # хочу отметить этот модуль - он позволяет работать программе на разных потоках. Из-за этого игра достаточно оптимизирована
-    from screeninfo import get_monitors
-    import socket
-    import pyximport; pyximport.install() # этот модуль для большей иниициализации языка PythonX.
+    from online.client import *  # клиент
+    from panda3d.core import *  # ядро игрового движка
+    from src.marconit_engine import *  # marcoNIT engine(API к панде)
+    from src.bot import bot  # логика ботов
+    from src.net import *  # сеть
+    from src.parsers.loading_levels import *  # загрузка уровней
+    from src.parsers.download_levels import downloading  # скачивание уровней
+    from src.settings import *  # настройки
+    import src.gui as gui  # все ГУИ
+    from src.GUI.choose_server import *  # выбор сервера ГУИ
+    from src.GUI.top_players import *  # топ-игроки ГУИ
+    from src.GUI.developers import *  # разработчики ГУИ
+    from src.GUI.moderators import *  # модераторы ГУИ
+    from src.GUI.choose_site import *  # выбор сервера ГУИ
+    from src.GUI.profile import *  # профиль ГУИ
+    from src.GUI.privilege import *
+    import src.audio as audio  # аудио
+    import src.pbp as pbp  # pbr система
+    import src.ipgetter as ipgetter  # получатель айпи
+    import random  # рандом
+    import sys  # система
+    import time  #время
+    from datetime import datetime  # время2
+    import os  # модуль для терминальных команд
+    import math  # математика....ААААААААААААААААААААААА!!
+    from screeninfo import get_monitors  # модуль для получения информации об экране
+    import socket  #  модуль для сервера
+    import pyximport;
 
-    # For addons
-    import json
+    pyximport.install()  # этот модуль для большей иниициализации языка PythonX(Cython-a. Можете почитать о нем в гугле или других источниках)
+    import json  # читатель файлов(если есть аддоны)
+    import requests  # запрсник
+    import asyncio  # ассинхоность
+    import select  # типа сокета, но лучше
 
-    sites = ['gitlab.com', 'panda3d.org', 'a3p.sf.net']
+    print('Normal importing modules [OK]')  # печатаем что нормально загрузились модули
 
-    config = json.load(open("./RES/addon_config.json"))
-    addon_classes = []
-    for addon in config:
-        if not config[addon]["disabled"]:
-            exec("from addons." + addon + ".main  import *")
-            addon_classes.append(config[addon]["main_class"])
+    config = json.load(open("./RES/addon_config.json"))  # загружаем конфиг аддона
+    addon_classes = []  # классы аддонов
+    for addon in config:  # читаем конфиг
+        if not config[addon]["disabled"]:  # если аддон не отключен - ЧИТАЕМ!
+            exec("from addons." + addon + ".main  import *")  # выполняем аддон
+            addon_classes.append(config[addon]["main_class"])  # добавляем в класс аддонов
 
-    message(message='') # сообщение
+    message(message=f'Welcome to Droid Game {VERSION}')  # сообщение
     # подключение к серверу
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # создаем обьект портала для подключения
-    s.connect((site(sites[1]), 80)) # подключаемся к серверу
-    s.send(b'Connected by Droid Game ') # посылаем на сервер сообщение на сервер
-    s.close() # отключаем посылание на сервер, чтобы сервер не подумал что это разные игроки. Да, способ наитупейший, но рабочий!
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # создаем обьект портала для подключения
+    s.connect((site(sites[0]), DEFAULT_PORT))  # подключаемся к серверу
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # делаем коннект к серверу многоразовый
+    s.send(
+        f'Connected by Droid Game {VERSION} and IP {IP_USER}:{DEFAULT_PORT}'.encode())  # посылаем на сервер сообщение
 
-    loadPrcFileData('', 'show-frame-rate-meter true') # показываем количество кадров в секунду
+    loadPrcFileData('', 'show-frame-rate-meter true')  # показываем количество кадров в секунду
     loadPrcFileData(
         "",
         "audio-library-name "
         + ("p3openal_audio" if sys.platform == "linux" else "p3fmod_audio"),
-    ) # система звука в зависимости от вашей ОС
-    loadPrcFileData("", "threading-model Cull/Draw") # используем много процессорный Render Pipeline(https://github.com/tobspr/RenderPipeline) для большей риалистичности
+    )  # система звука в зависимости от вашей ОС
+    loadPrcFileData("", "threading-model Cull/Draw")  # используем многопоточный рендер
+
 
     def load_profile(filename_p):
         '''загружаем профиль'''
-        with open(filename_p) as f: # загружаем файл с профилем
-            for line in f: # читаем линии в файле
-                return line + str(random.randrange(0, 1500)) # возвращаем имя игрока
-            
-    USERNAME = load_profile('./RES/profile.txt') # загружаем профиль
+        with open(filename_p, "r") as f:  # загружаем файл с профилем
+            for line in f:  # читаем линии в файле
+                return line  # возвращаем линию(-и)
 
-    # старт клиента сервера
+
+    # функция для обновления файла
+    def update_file(directory_, filename_p_, value, name):
+        path = directory_ + '/' + filename_p_  # отдельная переменная для  всей директории файла
+
+        open_file = open(str(path), "w+")  # открываем файл
+        open_file.write(value)  # пишем новое значение
+        open_file.close()  # закрываем файл
+
+        return f"Normal update {name} [OK]"  # типа файл хорошо загрузился и обновился
+
+
+    USERNAME = load_profile('./profile/username.txt')  # загружаем имя пользователя
+    RATING = int(load_profile('./profile/rating.txt'))  # загружаем рейтинг пользователя
+    STATUS = load_profile('./profile/status.txt')  # загружаем статус пользователя
+
+
+    # старт клиента
     def start_client():
-        worldClient = Client(9099,ipgetter.myip()) # подключение к миру и получение айпи
-        N = PlayerReg() # регистрация игрока в мире
-        keys = Keys() # клавиши
-        w = World() # мир
-        chatReg = chatRegulator(worldClient,keys) # рега чата
+        worldClient = Client(9099, ipgetter.myip())  # подключение к миру и получение айпи
+        N = PlayerReg()  # регистрация игрока в мире
+        keys = Keys()  # клавиши
+        w = World()  # мир
+        chatReg = chatRegulator(worldClient, keys)  # рега чата
+
+
+    def receiveTextViaSocket(sock):
+        '''получает сообщение с сервера'''
+        # получaeт текст через сокет
+        encodedMessage = sock.recv(1024)
+
+        # если мы ничего не получили то возвращаем ничего..
+        if not encodedMessage:
+            return None
+
+        # расшифровываем полученное сообщение
+        message = encodedMessage.decode('utf-8')
+
+        # теперь пора отправить подтверждение
+        # шифруем текст подтверждения
+        encodedAckText = bytes(ACK_TEXT, 'utf-8')
+
+        # отправляем шифрованный текст подтверждения
+        sock.sendall(encodedAckText)
+
+        return message  # возвращаем сообщение
+
+
+    # проверка обновлений(с ассинхроностью)
+    async def listening_updates(server_updates):
+        while True:
+            link = server_updates  # ссылка
+            f = requests.get(link)  # получаем текст
+            if f:  # текст будет либо True либо False
+                await message('''
+                        UPDATE! Added: {}
+                                Number update: {}
+
+                                    Thanks for playing :)
+                        ''')  # сообщение об обновлении
+
+
+    async def check_receive():
+        '''проверяет поступающие с сервера сообщения'''
+        socks = [s]  # наши сокеты
+        while True:  # вечный цикл(БЕСКОНЕЧНОСТЬ НЕ ПРЕДЕЛ!)
+            readySocks, _, _ = select.select(socks, [], [], 5)  # готовые сокеты
+            for sock in readySocks:  # проходимся по готовым сокетам
+                message_s = receiveTextViaSocket(sock)  # записываем полученное с сервера сообщение
+                await print('received: ' + str(message_s))  # печатаем полученное сообщение
+
+
+    def sending(msg):
+        '''отправляет сообщение'''
+        s.send(str(msg).encode())  # отправка в байтах
+
 
     def showHelpInfo():
-        # Говорим пользователю об использованию
-        print('Droid Game ' + VERSION + ' - ' + COPYRIGHT) # информация о игре
-        print('Использование(Usage):') # использование
-        print('-d \t\t\Режим разробтчика(Developer mode)') # тут всё написано
-        print('-l \t\t\Скачать уровни(Download levels)') # и тут тоже
-        sys.exit() # выходим
+        # Говорим пользователю об использованиu
+        print('Droid Game ' + VERSION + ' - ' + COPYRIGHT)  # информация о игре
+        print('Использование(Usage):')  # использование
+        print('-d \t\t\Режим разробoтчика(Developer mode)')  # тут всё написано
+        print('-l \t\t\Скачать уровни(Download levels)')  # и тут тоже
+        sys.exit()  # выходим
+
 
     # если пользователю интересно, как пользоватся программой, говорим ему об этом
     if "-h" in sys.argv or "/?" in sys.argv or "--help" in sys.argv:
-        showHelpInfo() # показываем нформацию
+        showHelpInfo()  # показываем нформацию
 
     # если пользователь указал аргумент режима разроботчика, вкл. его
     elif '-d' in sys.argv:
@@ -129,151 +216,213 @@ try :
     elif '-l' in sys.argv:
         downloading()
 
+
+    # запуск с ассинхроностью
+    async def start():
+        droid = DroidShooter()  # обьект игры
+        await droid.run()  # let's start it!
+
+
+    #  проверка на наличие модерки
+    if USERNAME in MODS:
+        sending(f'Moderator! {IP_USER}:{DEFAULT_PORT}')  # отправляем на сервер сообщение
+
+
+    # запуск всех задач с асинхроностью
+    async def main():
+        taskA = loop.create_task(start())  # основная игра
+        taskB = loop.create_task(listening_updates(sites[0]))  # Проверяем обновления
+        taskC = loop.create_task(check_receive())  # проверка полученых сообщений
+        await asyncio.wait([taskA, taskB, taskC])  # запуск задач
+
+
     # режим захвата флага
     class Capture_flag():
         def __init__(self, player, base_1, base_2):
-            self.player = player
-            self.base_1 = base_1
-            self.base_2 = base_2
-            
-            self.player_pos = self.player.getPos()
-            self.base_1_pos = base_1.getPos()
-            self.base_2_pos = base_2.getPos()
+            self.player = player  # инициализируем игрока
+            self.base_1 = base_1  # инициализируем первую базу
+            self.base_2 = base_2  # инициализируем вторую базу
 
-        def update(self):
-            self.player_pos = self.player.getPos()
-            self.base_1_pos = self.base_1.getPos()
-            self.base_2_pos = self.base_2.getPos()
+            self.player_pos = self.player.getPos()  # получаем позицию игрока
+            self.base_1_pos = base_1.getPos()  # получаем позицию первой базы
+            self.base_2_pos = base_2.getPos()  # получаем позицию второй базы
 
-            if self.player_pos == self.base_2_pos:
-                return True
+        def update(self):  # обновление захвата флага
+            self.player_pos = self.player.getPos()  # получаем новую позицию игрока
+            self.base_1_pos = self.base_1.getPos()  # получаем новую позицию первой базы
+            self.base_2_pos = self.base_2.getPos()  # получаем новую позицию второй базы
 
-            if self.player_pos == self.base_1_pos:
-                return False
-            
+            if self.player_pos == self.base_2_pos:  # если игрок находится на координатах второй базы, то...
+                return True  # ...возвращаем True
+
+
     # Создадим главный класс нашей игры
     class DroidShooter(ShowBase):
         def __init__(self):
-            ShowBase.__init__(self) # Загружаем все селфы из direct
-            self.speed = 100 # скорость двигателя
-            self.GB = False # НЕ чёрно-белый режим
-            self.EN = False # Не будем включать английский язык
-            self.rust_effect = False # Поставим, что дроид не ржавый
-            self.basic_droid = True # включаем стандартного дроида
-            self.pod_droid = False # не включаем большого дроида
-            self.shield_droid = False # не включаем щитного дроида
-            self.pro_machine = False # Не включаем проффесиональное управление
-            self.single = False # Не включаем одиночную игру
-            self.sun_interval = 80 # Интервал солнца
-            self.exiting = False # Поставим, что ещё не выходили из игры
-            self.another_camera = False # не включаем вид от первого лица
-            self.arg_username = 'd' # аргументы игрока
-            self.username = USERNAME # имя игрока
+            ShowBase.__init__(self)  # Загружаем все селфы из direct
+            self.speed = 100  # скорость двигателя
+            self.GB = False  # НЕ чёрно-белый режим
+            self.EN = False  # Не будем включать английский язык
+            self.rust_effect = False  # Поставим, что дроид не ржавый
+            self.basic_droid = True  # включаем стандартного дроида
+            self.pod_droid = False  # не включаем большого дроида
+            self.shield_droid = False  # не включаем щитного дроида
+            self.pro_machine = False  # Не включаем проффесиональное управление
+            self.single = False  # Не включаем одиночную игру
+            self.sun_interval = 80  # Интервал солнца
+            self.exiting = False  # Поставим, что ещё не выходили из игры
+            self.another_camera = False  # не включаем вид от первого лица
+            self.arg_username = 'd'  # аргументы игрока
+            self.username = USERNAME  # имя игрока
+            self.rating = RATING  # рейтинг игрока
+            self.weapon_choosed = False  # поставим, что другое оружие не выбрано
 
-            self.level = load_level(LEVEL1) # уровень по умолчанию
-            
+            self.level = load_level(LEVEL1)  # уровень по умолчанию(первый)
+
             # проходимся по всем мониторам(у многих программистов их два, но если он у вас один, всё всё равно будет работать)
             for monitor in get_monitors():
-                self.screen_width = monitor.width - 700 # делаем новый размер окна по ширине
-                self.screen_height = monitor.height - 400 # делаем новый размер окна по высоте
+                self.screen_width = monitor.width - 700  # делаем новый размер окна по ширине
+                self.screen_height = monitor.height - 400  # делаем новый размер окна по высоте
 
-            self.menu(False) # зaпуск меню
+            self.menu(False)  # зaпуск меню
 
-        def weapon_menu___init__(self, rootParent=None):
-            global weapon_choosed
-            
-            self.pg149 = DirectButton(
-                borderWidth=(0.2, 0.7),
-                frameColor=(0.9, 0.85, 0.876, 0.5),
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0.8, 0, 0.675),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Pistol',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1.0),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-                pressEffect=1,
-                command=self.pistol_choosed
-            )
-            self.pg149.setTransparency(0)
+        def weapon_menu___init__(self, cm, rootParent=None):
 
-            weapon_choosed = True
+            '''Выбор оружия'''
+
+            if cm:  # если заходим второй раз
+                if self.weapon_choosed:  # другое оруужие не выбрано
+                    self.pistol_weapon.destroy()  # удаляеем кнопку пистолета
+
+                else:  # а если не выбрано
+                    self.sniper_weapon.destroy()  # удаляем кнопку снайперки
+
+            if not self.weapon_choosed:  # если другое оружие не выбрано...
+                self.pistol_weapon = DirectButton(  # рисуем интерфейс кнопки с пистолетом
+                    borderWidth=(0.2, 0.7),
+                    frameColor=(0.9, 0.85, 0.876, 0.5),
+                    frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                    hpr=LVecBase3f(0, 0, 0),
+                    pos=LPoint3f(0.8, 0, 0.675),
+                    scale=LVecBase3f(0.1, 0.1, 0.1),
+                    text='Pistol',
+                    text_align=TextNode.A_center,
+                    text_scale=(0.5, 1.0),
+                    text_pos=(0, 0),
+                    text_fg=LVecBase4f(0, 0, 0, 1),
+                    text_bg=LVecBase4f(0, 0, 0, 0),
+                    text_wordwrap=None,
+                    parent=rootParent,
+                    pressEffect=1,
+                    command=self.pistol_choosed
+                )
+                self.pistol_weapon.setTransparency(0)
+
+            else:  # а если выбрано...
+                self.sniper_weapon = DirectButton(  # рисуем интерфейс кнопки с снайперкой
+                    borderWidth=(0.2, 0.7),
+                    frameColor=(0.9, 0.85, 0.876, 0.5),
+                    frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                    hpr=LVecBase3f(0, 0, 0),
+                    pos=LPoint3f(0.8, 0, 0.675),
+                    scale=LVecBase3f(0.1, 0.1, 0.1),
+                    text='Sniper',
+                    text_align=TextNode.A_center,
+                    text_scale=(0.5, 1.0),
+                    text_pos=(0, 0),
+                    text_fg=LVecBase4f(0, 0, 0, 1),
+                    text_bg=LVecBase4f(0, 0, 0, 0),
+                    text_wordwrap=None,
+                    parent=rootParent,
+                    pressEffect=1,
+                    command=self.sniper_choosed
+                )
+                self.sniper_weapon.setTransparency(0)
 
         def pistol_choosed(self):
-            global weapon_choosed
-            
-            weapon_choosed = False
 
-        def check_weapon(self):
-            return self.weapon_choosed
-                
-        
+            self.weapon.hide()  # удаляем прередущие оружие
+            self.weapon = GameApi.object(self, './models/BasicDroid/pistol.egg', .5,
+                                         self.weapon_pos)  # обновим оружие
+
+            self.weapon_choosed = True  # поставим, что оружие выбрано другое
+            self.weapon_menu___init__(True)  # открываем снова выбор оружия
+
+        def sniper_choosed(self):
+
+            self.weapon.hide()  # удаляем прередущие оружие
+            self.weapon = GameApi.object(self, './models/BasicDroid/sniper.egg', .5,
+                                         self.weapon_pos)  # обновим оружие
+
+            self.weapon_choosed = False  # поставим, что оружие НЕ выбрано другое
+            self.weapon_menu___init__(True)  # открываем снова выбор оружия
+
         def weapon_menu_show(self):
+            '''показать меню оружий'''
             self.pg149.show()
 
         def weapon_menu_hide(self):
+            '''скрыть меню оружий'''
             self.pg149.hide()
 
         def weapon_menu_destroy(self):
+            '''удалить меню оружий'''
             self.pg149.destroy()
-        
+
         def menu(self, menu, rootParent=None):
 
             # Настраиваем окно
-            self.props = WindowProperties() # класс настроек
-            self.props.setTitle('Droid Game ' + VERSION) # заголовок окна
-            self.props.setUndecorated(True) # убираем раму окна
-            self.props.setSize(self.screen_width, self.screen_height) # размер окна
+            self.props = WindowProperties()  # класс настроек
+            self.props.setTitle('Droid Game ' + VERSION)  # заголовок окна
+            self.props.setUndecorated(True)  # убираем раму окна
+            self.props.setSize(self.screen_width, self.screen_height)  # размер окна
 
-            self.openDefaultWindow(props=self.props) # Используем настройки
-            
-            base.enableParticles() # инициализируем эффект дыма
-            self.disableMouse() # Отключаем перемещение через мышку
+            self.openDefaultWindow(props=self.props)  # Используем настройки
 
-            self.win.setClearColor((0.5, 0.5, 0.8, 1)) # Закрашиваем поверхность чёрным. Дело в том, что по умолчанию в этом игровом движке поверхность закрашивается серым.
-            self.font = loader.loadFont('./fonts/doom_font.ttf') # загрузим шрифт из игры doom
-            self.inst_font = loader.loadFont('./fonts/arial.ttf') # загрузим шрифт arial
+            base.enableParticles()  # инициализируем эффект дыма
+            self.disableMouse()  # Отключаем перемещение через мышку
 
-            self.crackSound = audio.FlatSound('./sounds/glass-shatter1.ogg') # звук взрыва корабля
-            self.shotSound = audio.FlatSound('./sounds/sniper-rifle.ogg') # звук выстрела
-            self.errorSound = audio.FlatSound('./sounds/reload.ogg') # звук запуска
-            self.click_sound = audio.FlatSound('./sounds/click.ogg') # звук нажатия
-            self.command_sound = audio.FlatSound('./sounds/command.ogg') # звук команды
-            self.kamikaze_sound = audio.FlatSound('./sounds/kamikaze-special.ogg') # звук опасности
-            self.alarm_sound = audio.FlatSound('./sounds/alarm.ogg') # звук опасности
-            self.change_weapon_sound = audio.FlatSound('./sounds/change-weapon.ogg') # звук перемены оружия
-            self.shield_sound = audio.FlatSound('./sounds/shield.ogg') # звук щита
+            self.win.setClearColor((0.5, 0.5, 0.8,
+                                    1))  # Закрашиваем поверхность чёрным. Дело в том, что по умолчанию в этом игровом движке поверхность закрашивается серым.
+            self.font = loader.loadFont('./fonts/doom_font.ttf')  # загрузим шрифт из игры doom
+            self.inst_font = loader.loadFont('./fonts/arial.ttf')  # загрузим шрифт arial
 
-            self.grenade_boom = audio.FlatSound('./sounds/grenade.ogg') # звук гранаты
-            self.grenade_boun = audio.FlatSound('./sounds/grenade-bounce.ogg') # звук таймера гранаты
-            self.grenade_launch = audio.FlatSound('./sounds/grenade-launch.ogg') # звук взрыва гранаты
-            
+            self.crackSound = audio.FlatSound('./sounds/glass-shatter1.ogg')  # звук взрыва корабля
+            self.shotSound = audio.FlatSound('./sounds/sniper-rifle.ogg')  # звук выстрела
+            self.errorSound = audio.FlatSound('./sounds/reload.ogg')  # звук запуска
+            self.click_sound = audio.FlatSound('./sounds/click.ogg')  # звук нажатия
+            self.command_sound = audio.FlatSound('./sounds/command.ogg')  # звук команды
+            self.kamikaze_sound = audio.FlatSound('./sounds/kamikaze-special.ogg')  # звук опасности
+            self.alarm_sound = audio.FlatSound('./sounds/alarm.ogg')  # звук опасности
+            self.change_weapon_sound = audio.FlatSound('./sounds/change-weapon.ogg')  # звук перемены оружия
+            self.shield_sound = audio.FlatSound('./sounds/shield.ogg')  # звук щита
+
+            self.grenade_boom = audio.FlatSound('./sounds/grenade.ogg')  # звук гранаты
+            self.grenade_boun = audio.FlatSound('./sounds/grenade-bounce.ogg')  # звук таймера гранаты
+            self.grenade_launch = audio.FlatSound('./sounds/grenade-launch.ogg')  # звук взрыва гранаты
+
             self.BgSound = audio.FlatSound(
-                "sounds/background.ogg", volume=.01) # фоновая музыка в меню
-            self.intro_sound = audio.FlatSound('./sounds/intro.ogg', volume=.01) # звук интро
+                "sounds/background.ogg", volume=.01)  # фоновая музыка в меню
+            self.intro_sound = audio.FlatSound('./sounds/intro.ogg', volume=.01)  # звук интро
 
-            self.BgSound.play() # играем звук запуска игры
+            self.BgSound.play()  # играем звук запуска игры
 
             # Планета
-            if not menu: # Если не входили в чат или инструменты рисуем планету.
-                self.camera_distation = random.randrange(20, 30) # дистанция камеры от планеты. генерируем её рандомно в диапозоне от 20 до 30            
-                self.globe = loader.loadModel("menu/Globe") # загружаем модель планеты
-                self.globe.reparentTo(render) # инициализируем модель
-                self.globe.setTransparency(TransparencyAttrib.MAlpha) # прозрачность
-                self.globe.setColor(Vec4(1, 1, 1, 0.6)) # цвет
-                self.globe.setTwoSided(True) # двойная модель
-                self.globe.setRenderModeWireframe() # полигольный режим
+            if not menu:  # Если не входили в чат или инструменты рисуем планету.
+                self.camera_distation = random.randrange(20,
+                                                         30)  # дистанция камеры от планеты. генерируем её рандомно в диапозоне от 20 до 30
+                self.globe = loader.loadModel("menu/Globe")  # загружаем модель планеты
+                self.globe.reparentTo(render)  # инициализируем модель
+                self.globe.setTransparency(TransparencyAttrib.MAlpha)  # прозрачность
+                self.globe.setColor(Vec4(1, 1, 1, 0.6))  # цвет
+                self.globe.setTwoSided(True)  # двойная модель
+                self.globe.setRenderModeWireframe()  # полигольный режим
 
                 # Врашение планеты
                 self.globe.hprInterval(200, (360, 360, 0)).loop()
 
-                self.camera.setPos(0, -self.camera_distation, 0) # камера
-                
+                self.camera.setPos(0, -self.camera_distation, 0)  # камера
+
             # P. S. Это меню я не писал. Оно сделано на DirectGUIDesigner
             self.pg3083 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
@@ -574,7 +723,61 @@ try :
                 pressEffect=1,
                 command=self.open_moderators_gui,
             )
-            self.pgTop.setTransparency(0)  
+            self.pgTop.setTransparency(0)
+
+            self.pgProfile = DirectButton(
+                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0, 0, 9.500),
+                scale=LVecBase3f(1, 1, 1),
+                text='Profile',
+                text_align=TextNode.A_center,
+                text_scale=(0.5, 1),
+                text_pos=(0, 0),
+                text_fg=LVecBase4f(0, 0, 0, 1),
+                text_bg=LVecBase4f(0, 0, 0, 0),
+                text_wordwrap=None,
+                parent=self.pgSingle,
+                pressEffect=1,
+                command=self.open_profile_gui,
+            )
+            self.pgProfile.setTransparency(0)
+
+            self.pgProfile = DirectButton(
+                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0, 0, 9.500),
+                scale=LVecBase3f(1, 1, 1),
+                text='Profile',
+                text_align=TextNode.A_center,
+                text_scale=(0.5, 1),
+                text_pos=(0, 0),
+                text_fg=LVecBase4f(0, 0, 0, 1),
+                text_bg=LVecBase4f(0, 0, 0, 0),
+                text_wordwrap=None,
+                parent=self.pgSingle,
+                pressEffect=1,
+                command=self.open_profile_gui,
+            )
+            self.pgProfile.setTransparency(0)
+
+            self.pgPrivilege = DirectButton(
+                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0, 0, 10.500),
+                scale=LVecBase3f(1, 1, 1),
+                text='Privilege',
+                text_align=TextNode.A_center,
+                text_scale=(0.5, 1),
+                text_pos=(0, 0),
+                text_fg=LVecBase4f(0, 0, 0, 1),
+                text_bg=LVecBase4f(0, 0, 0, 0),
+                text_wordwrap=None,
+                parent=self.pgSingle,
+                pressEffect=1,
+                command=self.open_prvilege_gui,
+            )
+            self.pgPrivilege.setTransparency(0)
 
             self.pg452 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
@@ -594,7 +797,7 @@ try :
             )
             self.pg452.setTransparency(0)
 
-            self.accept("escape", sys.exit) # При нажатии клавиши Esc выходим.
+            self.accept("escape", sys.exit)  # При нажатии клавиши Esc выходим.
 
         def open_top_gui(self):
             # Удаляем элементы меню
@@ -606,10 +809,10 @@ try :
             self.pg326.destroy()
             self.pgSingle.destroy()
             self.pgServers.destroy()
-            
-            self.top_players_gui = GUI(USERNAME) # загружаем интерфейс который прописан в файле
 
-            self.accept('e', self.top_players_gui_destroy) # при нажатии E - убираем это меню
+            self.top_players_gui = GUI(USERNAME)  # загружаем интерфейс который прописан в файле
+
+            self.accept('esc', self.top_players_gui_destroy)  # при нажатии E - убираем это меню
 
         def open_developers_gui(self):
             # Удаляем элементы меню
@@ -621,10 +824,10 @@ try :
             self.pg326.destroy()
             self.pgSingle.destroy()
             self.pgServers.destroy()
-            
-            self.developers_gui = GUI_2() # загружаем интерфейс который прописан в файле
 
-            self.accept('e', self.developers_gui_destroy) # при нажатии E - убираем это меню
+            self.developers_gui = GUI_2()  # загружаем интерфейс который прописан в файле
+
+            self.accept('esc', self.developers_gui_destroy)  # при нажатии E - убираем это меню
 
         def open_moderators_gui(self):
             # Удаляем элементы меню
@@ -637,35 +840,86 @@ try :
             self.pgSingle.destroy()
             self.pgServers.destroy()
 
-            self.moderators_gui = GUI_3() # загружаем интерфейс который прописан в файле
-            
-            self.accept('e', self.moderators_gui_destroy) # при нажатии E - убираем это меню        
+            self.moderators_gui = GUI_3()  # загружаем интерфейс который прописан в файле
+
+            self.accept('esc', self.moderators_gui_destroy)  # при нажатии E - убираем это меню
+
+        def open_profile_gui(self):
+            # Удаляем элементы меню
+            self.pg3083.destroy()
+            self.pg27986.destroy()
+            self.pg28909.destroy()
+            self.pg149.destroy()
+            self.pg452.destroy()
+            self.pg326.destroy()
+            self.pgSingle.destroy()
+            self.pgServers.destroy()
+
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+
+            self.profile_gui = GUI_5(username=USERNAME, status=STATUS,
+                                     rating=str(self.rating))  # загружаем интерфейс который прописан в файле
+
+            self.accept('esc', self.profile_gui_destroy)  # при нажатии E - убираем это меню
+
+        def open_prvilege_gui(self):
+            # Удаляем элементы меню
+            self.pg3083.destroy()
+            self.pg27986.destroy()
+            self.pg28909.destroy()
+            self.pg149.destroy()
+            self.pg452.destroy()
+            self.pg326.destroy()
+            self.pgSingle.destroy()
+            self.pgServers.destroy()
+
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+
+            self.prvilege_gui = privilege()  # загружаем интерфейс привелегий
+
+        def profile_gui_destroy(self):
+            self.profile_gui.destroy()  # убираем интерфейс профиля
+
+            self.menu(False)  # открываем меню
 
         def moderators_gui_destroy(self):
-            self.moderators_gui.hide() # убираем интерфейс модераторов
+            self.moderators_gui.destroy()  # убираем интерфейс модераторов
 
-            self.menu(False) # открываем меню
+            self.menu(False)  # открываем меню
 
         def top_players_gui_destroy(self):
-            self.top_players_gui.destroy() # убираем интерфейс топовых игроков
+            self.top_players_gui.destroy()  # убираем интерфейс топовых игроков
 
-            self.menu(False) # открываем меню
-            
+            self.menu(False)  # открываем меню
+
         def developers_gui_destroy(self):
-            self.developers_gui.destroy() # убираем интерфейс разроботчиков
+            self.developers_gui.destroy()  # убираем интерфейс разроботчиков
 
-            self.menu(False) # открываем меню
-            
+            self.menu(False)  # открываем меню
+
         def direction_show(self):
             '''показ управления'''
             gui.mainloop_direction()
-        
+
+        def chat_gui_destroy(self):
+            self.pg1384.destroy()  # удаляем интерфейс чата
+            self.pgpg10418.destroy()
+            удаляем
+            интерфейс
+            чата
+
+            self.menu(False)  # открываем меню
+
         def choose_level(self, rootParent=None):
             # выбор уровня
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
 
             # сделаем одиночную игру.
-            self.single = True 
-            
+            self.single = True
+
             # удаляем элемиенты меню
             self.pg3083.destroy()
             self.pg27986.destroy()
@@ -747,26 +1001,32 @@ try :
             self.pg2663.setTransparency(0)
 
         def one_level(self):
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # включение первого уровня
             self.level = load_level(LEVEL1)
             # удаляем элементы
             self.pg149.hide()
-            self.menu(False) # включим menu
+            self.menu(False)  # включим menu
 
         def two_level(self):
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # включение второго уровня
             self.level = load_level(LEVEL2)
             # удаляем элементы
             self.pg149.hide()
-            self.menu(False) # включим menu
+            self.menu(False)  # включим menu
 
         def three_level(self):
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # включение третьего уровня
             self.level = load_level(LEVEL3)
             # удаляем элементы
             self.pg149.hide()
-            self.menu(False) # включим menu
-        
+            self.menu(False)  # включим menu
+
         def bug_message(self, rootParent=None):
             # сообщение о баге
 
@@ -779,6 +1039,9 @@ try :
             self.pg326.destroy()
             self.pgSingle.destroy()
             self.pgServers.destroy()
+
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
 
             # рисуем интерфейс
             self.pg149 = DirectButton(
@@ -814,9 +1077,12 @@ try :
                 parent=self.pg149,
             )
             self.pg438.setTransparency(0)
-        
+
         def select_droid(self, rootParent=None):
             # Выбор дроида
+
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
 
             # удаляем элемиенты меню
             self.pg3083.destroy()
@@ -923,256 +1189,68 @@ try :
             )
             self.pg1254.setTransparency(0)
 
-        def open_chat(self, rootParent=None):
-                # Чат
-
-                # удаляем элементы меню
-                self.pg3083.destroy()
-                self.pg27986.destroy()
-                self.pg28909.destroy()
-                self.pg149.destroy()
-                self.pg452.destroy()
-                self.pg326.destroy()
-                self.pgSingle.destroy()
-                self.pgServers.destroy()
-
-                # Рисуем интерфейс
-                self.pg212 = DirectScrolledFrame(
-                frameColor=(1, 1, 1, 1),
-                frameSize=(-1.0, 0.0, -1.0, 0.0),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0.2, 0, 0.475),
-                scrollBarWidth=0.08,
-                state='normal',
-                horizontalScroll_borderWidth=(0.01, 0.01),
-                horizontalScroll_frameSize=(-0.05, 0.05, -0.04, 0.04),
-                horizontalScroll_hpr=LVecBase3f(0, 0, 0),
-                horizontalScroll_pos=LPoint3f(0, 0, 0),
-                horizontalScroll_decButton_borderWidth=(0.01, 0.01),
-                horizontalScroll_decButton_frameSize=(-0.05, 0.05, -0.04, 0.04),
-                horizontalScroll_decButton_hpr=LVecBase3f(0, 0, 0),
-                horizontalScroll_decButton_pos=LPoint3f(-0.96, 0, -0.96),
-                horizontalScroll_incButton_borderWidth=(0.01, 0.01),
-                horizontalScroll_incButton_frameSize=(-0.05, 0.05, -0.04, 0.04),
-                horizontalScroll_incButton_hpr=LVecBase3f(0, 0, 0),
-                horizontalScroll_incButton_pos=LPoint3f(-0.12, 0, -0.96),
-                horizontalScroll_thumb_borderWidth=(0.01, 0.01),
-                horizontalScroll_thumb_hpr=LVecBase3f(0, 0, 0),
-                horizontalScroll_thumb_pos=LPoint3f(-0.8326, 0, -0.96),
-                verticalScroll_borderWidth=(0.01, 0.01),
-                verticalScroll_frameSize=(-0.04, 0.04, -0.05, 0.05),
-                verticalScroll_hpr=LVecBase3f(0, 0, 0),
-                verticalScroll_pos=LPoint3f(0, 0, 0),
-                verticalScroll_decButton_borderWidth=(0.01, 0.01),
-                verticalScroll_decButton_frameSize=(-0.04, 0.04, -0.05, 0.05),
-                verticalScroll_decButton_hpr=LVecBase3f(0, 0, 0),
-                verticalScroll_decButton_pos=LPoint3f(-0.04, 0, -0.04),
-                verticalScroll_incButton_borderWidth=(0.01, 0.01),
-                verticalScroll_incButton_frameSize=(-0.04, 0.04, -0.05, 0.05),
-                verticalScroll_incButton_hpr=LVecBase3f(0, 0, 0),
-                verticalScroll_incButton_pos=LPoint3f(-0.04, 0, -0.88),
-                verticalScroll_thumb_borderWidth=(0.01, 0.01),
-                verticalScroll_thumb_hpr=LVecBase3f(0, 0, 0),
-                verticalScroll_thumb_pos=LPoint3f(-0.04, 0, -0.1674),
-                parent=rootParent,
-                )
-                self.pg212.setTransparency(0)
-
-                self.pg3921 = DirectLabel(
-                    frameColor=(1.0, 1.0, 1.0, 1.0),
-                    frameSize=(-1.149999976158142, 1.25, -0.11250001192092896, 0.7250000238418579),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(-0.875, 0, 0),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='Chat',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg212,
-                )
-                self.pg3921.setTransparency(0)
-
-                self.pg5388 = DirectEntry(
-                    frameSize=(-0.1, 10.1, -0.396, 1.088),
-                    hpr=LVecBase3f(0, 0, 0),
-                    initialText='',
-                    pos=LPoint3f(-1.175, 0, -8.925),
-                    scale=LVecBase3f(0.9, 0.9, 0.7),
-                    text_align=TextNode.A_left,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg3921,
-                )
-                self.pg5388.setTransparency(0)
-
-                self.pg10591 = DirectButton(
-                    frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(-0.975, 0, 0.5),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='Exit',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=rootParent,
-                    command=self.exit_menu,
-                    pressEffect=1,
-                )
-                self.pg10591.setTransparency(0)
-
-                self.pg561 = DirectScrolledList(
-                    forceHeight=0.1,
-                    frameSize=(-0.5, 0.5, -0.01, 0.75),
-                    hpr=LVecBase3f(0, 0, 0),
-                    numItemsVisible=5,
-                    pos=LPoint3f(0.725, 0, -0.3),
-                    state='normal',
-                    text='Connect',
-                    decButton_borderWidth=(0.005, 0.005),
-                    decButton_hpr=LVecBase3f(0, 0, 0),
-                    decButton_pos=LPoint3f(-0.45, 0, 0.03),
-                    decButton_state='disabled',
-                    decButton_text='Prev',
-                    decButton_text_align=TextNode.A_left,
-                    decButton_text_scale=(0.05, 0.05),
-                    decButton_text_pos=(0, 0),
-                    decButton_text_fg=LVecBase4f(0, 0, 0, 1),
-                    decButton_text_bg=LVecBase4f(0, 0, 0, 0),
-                    decButton_text_wordwrap=None,
-                    incButton_borderWidth=(0.005, 0.005),
-                    incButton_hpr=LVecBase3f(0, 0, 0),
-                    incButton_pos=LPoint3f(0.45, 0, 0.03),
-                    incButton_state='disabled',
-                    incButton_text='Next',
-                    incButton_text_align=TextNode.A_right,
-                    incButton_text_scale=(0.05, 0.05),
-                    incButton_text_pos=(0, 0),
-                    incButton_text_fg=LVecBase4f(0, 0, 0, 1),
-                    incButton_text_bg=LVecBase4f(0, 0, 0, 0),
-                    incButton_text_wordwrap=None,
-                    itemFrame_frameColor=(1, 1, 1, 1),
-                    itemFrame_frameSize=(-0.47, 0.47, -0.5, 0.1),
-                    itemFrame_hpr=LVecBase3f(0, 0, 0),
-                    itemFrame_pos=LPoint3f(0, 0, 0.6),
-                    text_align=TextNode.A_center,
-                    text_scale=(0.1, 0.1),
-                    text_pos=(0, 0.015),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=rootParent,
-                )
-                self.pg561.setTransparency(0)
-
-                self.pg1809 = DirectScrolledListItem(
-                    frameSize=(-3.831250286102295, 3.9062500953674317, -0.21250001192092896, 0.85),
+        def update_chat(self):
+            # читаем все сообщения, показывая их
+            for message in messages:
+                self.pg7119 = DirectScrolledListItem(
+                    frameSize=LVecBase4f(-3.83125, 3.90625, -0.2125, 0.85),
                     hpr=LVecBase3f(0, 0, 0),
                     pos=LPoint3f(0, 0, 0),
                     scale=LVecBase3f(0.1, 0.1, 0.1),
                     state='disabled',
-                    text='Marcim_HACKER',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg561,
+                    text=message,
+                    text0_align=TextNode.A_center,
+                    text0_scale=(1, 1),
+                    text0_pos=(0, 0),
+                    text0_fg=LVecBase4f(0, 0, 0, 1),
+                    text0_bg=LVecBase4f(0, 0, 0, 0),
+                    text0_wordwrap=None,
+                    text1_align=TextNode.A_center,
+                    text1_scale=(1, 1),
+                    text1_pos=(0, 0),
+                    text1_fg=LVecBase4f(0, 0, 0, 1),
+                    text1_bg=LVecBase4f(0, 0, 0, 0),
+                    text1_wordwrap=None,
+                    text2_align=TextNode.A_center,
+                    text2_scale=(1, 1),
+                    text2_pos=(0, 0),
+                    text2_fg=LVecBase4f(0, 0, 0, 1),
+                    text2_bg=LVecBase4f(0, 0, 0, 0),
+                    text2_wordwrap=None,
+                    text3_align=TextNode.A_center,
+                    text3_scale=(1, 1),
+                    text3_pos=(0, 0),
+                    text3_fg=LVecBase4f(0, 0, 0, 1),
+                    text3_bg=LVecBase4f(0, 0, 0, 0),
+                    text3_wordwrap=None,
+                    parent=self.pg4898,
                     command=base.messenger.send,
                     extraArgs=['select_list_item_changed'],
                 )
-                self.pg1809.setTransparency(0)
+                self.pg7119.setTransparency(0)
 
-                self.pg1852 = DirectScrolledListItem(
-                    frameSize=(-3.831250286102295, 3.9062500953674317, -0.21250001192092896, 0.85),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(0, 0, -0.1),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='BOT',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg561,
-                    command=base.messenger.send,
-                    extraArgs=['select_list_item_changed'],
-                )
-                self.pg1852.setTransparency(0)
+                self.pg4898.addItem(self.pg7119)
 
-                self.pg1898 = DirectScrolledListItem(
-                    frameSize=(-3.831250286102295, 3.9062500953674317, -0.21250001192092896, 0.85),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(0, 0, -0.2),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='BOT',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg561,
-                    command=base.messenger.send,
-                    extraArgs=['select_list_item_changed'],
-                )
-                self.pg1898.setTransparency(0)
+        def send_message(self, value):
+            global messages  # делаем переменную глобальной
 
-                self.pg1947 = DirectScrolledListItem(
-                    frameSize=(-3.831250286102295, 3.9062500953674317, -0.21250001192092896, 0.85),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(0, 0, -0.3),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='BOT',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg561,
-                    command=base.messenger.send,
-                    extraArgs=['select_list_item_changed'],
-                )
-                self.pg1947.setTransparency(0)
+            if RATING >= 1010:  # если рейтинг больше или равен 1010 - можно отправлять сообщение в чате
+                sending(
+                    f'Message "{value}" from chat by {USERNAME}. {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер.
+                messages.append(value)  # добавляем в список сообщений сообщение
+                self.open_chat()  # открываем чат
 
-                self.pg1999 = DirectScrolledListItem(
-                    frameSize=(-3.831250286102295, 3.9062500953674317, -0.21250001192092896, 0.85),
-                    hpr=LVecBase3f(0, 0, 0),
-                    pos=LPoint3f(0, 0, -0.4),
-                    scale=LVecBase3f(0.1, 0.1, 0.1),
-                    text='System',
-                    text_align=TextNode.A_center,
-                    text_scale=(1, 1),
-                    text_pos=(0, 0),
-                    text_fg=LVecBase4f(0, 0, 0, 1),
-                    text_bg=LVecBase4f(0, 0, 0, 0),
-                    text_wordwrap=None,
-                    parent=self.pg561,
-                    command=base.messenger.send,
-                    extraArgs=['select_list_item_changed'],
-                )
-                self.pg1999.setTransparency(0)
+            else:  # если рейтинг ниже 1010
+                sending(
+                    f'{USERNAME} can"t send message "{value}" because haven"t 1010 rating {IP_USER}:{DEFAULT_PORT}')  # отарвляем сообщение на сервер
+                self.open_chat()  # открываем чат
 
-                self.pg561.addItem(self.pg1809)
-                self.pg561.addItem(self.pg1852)
-                self.pg561.addItem(self.pg1898)
-                self.pg561.addItem(self.pg1947)
-                self.pg561.addItem(self.pg1999)
+        def open_chat(self, rootParent=None):
+            # Чат
 
-        def choose_server(self, rootParent=None):
-            # выбор сервера
-            
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+
             # удаляем элементы меню
             self.pg3083.destroy()
             self.pg27986.destroy()
@@ -1183,8 +1261,114 @@ try :
             self.pgSingle.destroy()
             self.pgServers.destroy()
 
-            self.single = False # отключаем одиночную игру, поскольку когда игрок выбирает сервер одиночная игра ему не нужна
-            
+            # Рисуем интерфейс
+            self.pg1384 = DirectScrolledFrame(
+                canvasSize=(-2.0, 2.0, -2.0, 100.0),
+                frameColor=(1, 1, 1, 1),
+                frameSize=(-1.0, 1.0, -0.3, 1.0),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0, 0, 0),
+                scrollBarWidth=0.08,
+                state='normal',
+                horizontalScroll_borderWidth=(0.01, 0.01),
+                horizontalScroll_hpr=LVecBase3f(0, 0, 0),
+                horizontalScroll_pos=LPoint3f(0, 0, 0),
+                horizontalScroll_decButton_borderWidth=(0.01, 0.01),
+                horizontalScroll_decButton_frameSize=(-0.05, 0.05, -0.04, 0.04),
+                horizontalScroll_decButton_hpr=LVecBase3f(0, 0, 0),
+                horizontalScroll_decButton_pos=LPoint3f(-0.96, 0, -0.26),
+                horizontalScroll_incButton_borderWidth=(0.01, 0.01),
+                horizontalScroll_incButton_frameSize=(-0.05, 0.05, -0.04, 0.04),
+                horizontalScroll_incButton_hpr=LVecBase3f(0, 0, 0),
+                horizontalScroll_incButton_pos=LPoint3f(0.88, 0, -0.26),
+                horizontalScroll_thumb_borderWidth=(0.01, 0.01),
+                horizontalScroll_thumb_hpr=LVecBase3f(0, 0, 0),
+                horizontalScroll_thumb_pos=LPoint3f(-0.4976, 0, -0.26),
+                verticalScroll_borderWidth=(0.01, 0.01),
+                verticalScroll_hpr=LVecBase3f(0, 0, 0),
+                verticalScroll_pos=LPoint3f(0, 0, 0),
+                verticalScroll_decButton_borderWidth=(0.01, 0.01),
+                verticalScroll_decButton_frameSize=(-0.04, 0.04, -0.05, 0.05),
+                verticalScroll_decButton_hpr=LVecBase3f(0, 0, 0),
+                verticalScroll_decButton_pos=LPoint3f(0.96, 0, 0.96),
+                verticalScroll_incButton_borderWidth=(0.01, 0.01),
+                verticalScroll_incButton_frameSize=(-0.04, 0.04, -0.05, 0.05),
+                verticalScroll_incButton_hpr=LVecBase3f(0, 0, 0),
+                verticalScroll_incButton_pos=LPoint3f(0.96, 0, -0.18),
+                verticalScroll_thumb_borderWidth=(0.01, 0.01),
+                verticalScroll_thumb_hpr=LVecBase3f(0, 0, 0),
+                verticalScroll_thumb_pos=LPoint3f(0.96, 0, 0.913661),
+                parent=rootParent,
+            )
+            self.pg1384.setTransparency(0)
+
+            self.pg10418 = DirectEntry(
+                hpr=LVecBase3f(0, 0, 0),
+                initialText='Write message here :)',
+                pos=LPoint3f(-0.6, 0, 0),
+                text_align=TextNode.A_left,
+                text_scale=(0.1, 0.1),
+                text_pos=(0, 0),
+                text_fg=LVecBase4f(0, 0, 0, 1),
+                text_bg=LVecBase4f(0, 0, 0, 0),
+                text_wordwrap=None,
+                command=self.send_message,
+                parent=rootParent,
+            )
+            self.pg10418.setTransparency(0)
+
+            self.pg10419 = DirectEntryScroll(
+                frameColor=(0.0, 0.0, 0.0, 0.0),
+                frameSize=(1.0, 1.0, 1.0, 1.0),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.2, 0, -0.05),
+                scale=LVecBase3f(1, 0.7, 0.7),
+                parent=rootParent,
+                entry=self.pg10418,
+            )
+            self.pg10419.setTransparency(0)
+
+            # Рисуем сообщения
+            if not len(messages) == 0:  # если кол-во сообщений не равно 0, то
+                for i in messages:  # печатаем все сообщения
+                    coords = float(
+                        f'0.{len(messages) + 1}')  # координаты сообщения у меня не было других идей, но это работает
+                    DirectLabel(
+                        frameColor=(1.0, 1.0, 1.0, 1.0),
+                        frameSize=(-15.75, 3.45, -0.113, 0.725),
+                        hpr=LVecBase3f(0, 0, 0),
+                        pos=LPoint3f(0.575, 0, coords),
+                        scale=LVecBase3f(0.1, 0.1, 0.1),
+                        text=i,
+                        text0_align=TextNode.A_center,
+                        text0_scale=(1, 1),
+                        text0_pos=(-5.75, 0.0),
+                        text0_fg=LVecBase4f(0, 0, 0, 1),
+                        text0_bg=LVecBase4f(0, 0, 0, 0),
+                        text0_wordwrap=None,
+                        parent=self.pg1384,
+                    ).setTransparency(0)
+
+            self.accept('esc', self.chat_gui_destroy)  # при нажатии E - убираем это меню
+
+        def choose_server(self, rootParent=None):
+            # выбор сервера
+
+            # удаляем элементы меню
+            self.pg3083.destroy()
+            self.pg27986.destroy()
+            self.pg28909.destroy()
+            self.pg149.destroy()
+            self.pg452.destroy()
+            self.pg326.destroy()
+            self.pgSingle.destroy()
+            self.pgServers.destroy()
+
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+
+            self.single = False  # отключаем одиночную игру, поскольку когда игрок выбирает сервер одиночная игра ему не нужна
+
             # рисуем интерфейс
             self.pg471 = DirectScrolledList(
                 forceHeight=0.1,
@@ -1193,7 +1377,7 @@ try :
                 numItemsVisible=5,
                 pos=LPoint3f(0.4, 0, 0.05),
                 state='normal',
-                text='CEPBEPA',
+                text='Servers',
                 decButton_borderWidth=(0.005, 0.005),
                 decButton_hpr=LVecBase3f(0, 0, 0),
                 decButton_pos=LPoint3f(-0.45, 0, 0.03),
@@ -1376,28 +1560,30 @@ try :
             self.pg471.addItem(self.pg861)
             self.pg471.addItem(self.pg886)
             self.pg471.addItem(self.pg914)
-            self.pg471.addItem(self.pg945) 
-            
-        
+            self.pg471.addItem(self.pg945)
+
         def _basic_droid(self):
+            sending(f'Basic droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Выбор обычного дроида. Он выбран по умолчанию
-            self.click_sound.play() # играем звук клика
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
             self.basic_droid = True
             self.pod_droid = False
             self.shield_droid = False
 
         def _pod_droid(self):
+            sending(f'Pod droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Выбор большого дроида.
-            self.click_sound.play() # играем звук клика
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
             self.pod_droid = True
             self.basic_droid = False
             self.shield_droid = False
 
         def _shield_droid(self):
+            sending(f'Shield droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Выбор дроида с щитом
-            self.click_sound.play() # играем звук клика
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
             self.basic_droid = False
             self.pod_droid = False
@@ -1405,77 +1591,87 @@ try :
 
         def single_player(self):
             # Одиночная игра
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
-            
-            self.single = True 
-        
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+
+            self.single = True
+
         def exit_menu(self):
+            sending(f'Exit from chat! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Выход в меню из чата.
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # Удаляем элементы меню
-            self.pg212.hide()
-            self.pg10591.hide()
-            self.pg561.hide()        
+            self.pg212.destroy()
+            self.pg10591.destroy()
+            self.pg561.destroy()
 
             self.menu(False)
 
         def exit_menu2(self):
+            sending(f'Exit from droid choose! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Выход в меню из из выбора дроида.
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # Удаляем элементы меню
-            self.pg188.hide()
-            self.pg4741.hide()
-            self.pg1254.hide()
+            self.pg188.destroy()
+            self.pg4741.destroy()
+            self.pg1254.destroy()
 
-            self.menu(False) 
+            self.menu(False)
 
         def exit_menu4(self):
+            sending(f'Exit from bug sending! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # ВЫход в меню из отправки бага
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
 
             # удаляем элементы меню
-            self.pg149.hide()
+            self.pg149.destroy()
 
             self.menu(False)
 
         def exit_menu3(self):
+            sending(f'Exit from server menu! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # ВЫход в меню из серверов
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
             # Удаляем элементы меню
             self.pg471.destroy()
 
-            self.load_game() # открываем игру
+            self.load_game()  # открываем игру
 
         def set_lifes(self):
-            self.state = self.pg28909.guiItem.getValue() * 100 # загрузим слайдерное значение умноженое на 100, да трачу оптимизацию но мне кажется многим плевать на оптимизацию меню, ибо такого понятия просто нету :)
-            self.state_droid = self.state / 2
+            self.state = self.pg28909.guiItem.getValue() * 100  # загрузим слайдерное значение умноженое на 100, да трачу оптимизацию но мне кажется многим плевать на оптимизацию меню, ибо такого понятия просто нету :)
+            self.state_droid = int(self.state // 2)
+            self.state = int(self.state // 1)
+
+            sending('Set ' + str(self.state) + f' lifes! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
 
         def gb_mode(self):
             '''включение чёрнобелого режима'''
-            self.click_sound.play() # играем звук клика
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
             self.GB = True
 
         def en_lang(self):
             '''Изменение языка на английский'''
-            self.click_sound.play() # играем звук клика
+            sending(f'EN mode! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
             self.EN = True
 
         def pro_system(self):
             '''Проффесиональное управление'''
-            self.click_sound.play() # играем звук клика
+            self.click_sound.play()  # играем звук клика
             self.command_sound.play()
-            self.pro_machine = True # включаем проффесиональное управление
+            self.pro_machine = True  # включаем проффесиональное управление
 
         def load_game(self):
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук ввода команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук ввода команды
+
+            sending(f'Lgged as {USERNAME}! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
 
             # убираем элементы меню
             self.pg3083.destroy()
@@ -1486,19 +1682,20 @@ try :
             self.pgSingle.destroy()
             self.pgServers.destroy()
             self.pg452.destroy()
-            
-            self.pipeline = simplepbr.init() # initializating pbr light
-            
+
             # все действия над сервером если не включена одиночная игра
             if not self.single:
-                self.networking = PythonNetContext() # сервер
-                self.networking.bindSocket(DEFAULT_PORT) # 'одеваем на сервер' его порт
-                self.networking.connectToServer(self.arg_username, self.username) # коннектим игрока к серверу
-                self.networking.clientConnect(self.username) #ещё коннектим, без аргументов
-                self.networking.serverConnect(IP_USER) # коннектим айпи игрока
-                self.networking.addClient(self.username) # добавляем клиента.
-                self.networking.readTick() # читаем сервер
-                #start_server() # то было локальной сетью, а теперь мы создаём сервер онлайна на своём компе              
+                self.networking = PythonNetContext()  # сервер
+                self.networking.bindSocket(DEFAULT_PORT)  # 'одеваем на сервер' его порт
+                self.networking.connectToServer(self.arg_username, self.username)  # коннектим игрока к серверу
+                self.networking.clientConnect(self.username)  #ещё коннектим, без аргументов
+                self.networking.serverConnect(IP_USER)  # коннектим айпи игрока
+                self.networking.addClient(self.username)  # добавляем клиента.
+                self.networking.readTick()  # читаем сервер
+
+            else:
+                sending(f'Single player! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                s.close()  # закрываем сервер
 
             # если не выходили скроем глобус
             if not self.exiting:
@@ -1510,170 +1707,195 @@ try :
 
             # if no single mode
             if not self.single:
-                start_client() # запуск клиента
-                
+                start_client()  # запуск клиента
+
             # удаляем глобус, если не выходили из игры
             if not self.exiting:
                 del self.globe
 
             # меню оружий
-            self.weapon_menu___init__()
+            self.weapon_menu___init__(False)
 
-            self.intro_sound.play() # играем звук интро
+            self.intro_sound.play()  # играем звук интро
 
-            dt = globalClock.getDt() # переменная, которая показывает, сколко ыремени прошло между кадрами
+            dt = globalClock.getDt()  # переменная, которая показывает, сколко времени прошло между кадрами
 
             # меняем настройки, чтобы пользователю казалось, что открыто новое окно
-            self.props.setUndecorated(False) # раму мы показываем, но потом полноэкранный режим включается. Зачем это? Просто в panda3d если ты не уберешь одну настройку то она останется и будет влиять на все остальные.
-            self.props.setFullscreen(True) # включаем полноэкранный режим
-            self.openDefaultWindow(props=self.props) # Используем настройки
+            self.props.setUndecorated(
+                False)  # раму мы показываем, но потом полноэкранный режим включается. Зачем это? Просто в panda3d если ты не уберешь одну настройку то она останется и будет влиять на все остальные.
+            self.props.setFullscreen(True)  # включаем полноэкранный режим
+            self.openDefaultWindow(props=self.props)  # Используем настройки
 
             # включим специальные шейдеры
             self.sh_framework = pbp.ShadingFramework(self.render)
 
             self.keyMap = {
-                "left": 0, "right": 0, "forward": 0, "cam-left": 0, "cam-right": 0} # Создадим словарь кнопок, по их нажатию        
+                "left": 0, "right": 0, "forward": 0, "cam-left": 0,
+                "cam-right": 0}  # Создадим словарь кнопок, по их нажатию
 
             # Рисуем звёзды
 
-            self.sky = loader.loadModel("./models/sky/solar_sky_sphere") # загрузим модель космоса(это сфера)
+            self.sky = loader.loadModel("./models/sky/solar_sky_sphere")  # загрузим модель космоса(это сфера)
 
-            self.sky_tex = loader.loadTexture("./tex/stars_1k_tex.jpg") # загрузим текстуру
-            self.sky.setTexture(self.sky_tex, 1) # зарендерим текстуру на небо
-            self.sky.reparentTo(render) # инициализируем небо
-            self.sky.setScale(40000) # расширим небо до максимальной величины panda3d
+            self.sky_tex = loader.loadTexture("./tex/stars_1k_tex.jpg")  # загрузим текстуру
+            self.sky.setTexture(self.sky_tex, 1)  # зарендерим текстуру на небо
+            self.sky.reparentTo(render)  # инициализируем небо
+            self.sky.setScale(40000)  # расширим небо до максимальной величины panda3d
 
-            self.environ = loader.loadModel("./models/world/falcon.egg") # Загрузим уже созданный в blender мир.
-            self.environ.reparentTo(render) # Загружаем модель мира в окно
+            self.environ = loader.loadModel("./models/world/falcon.egg")  # Загрузим уже созданный в blender мир.
+            self.environ.reparentTo(render)  # Загружаем модель мира в окно
 
-            self.droidStartPos = (-1, 0, 1.5 ) # Загружаем стартовую позицию игрока в мире.
-            self.enemyStartPos = LVecBase3f(float(self.level[0]), float(self.level[1]), float(self.level[2])) # Загружаем позицию помощника-дроида.
+            self.droidStartPos = (-1, 0, 1.5)  # Загружаем стартовую позицию игрока в мире.
+            self.enemyStartPos = LVecBase3f(float(self.level[0]), float(self.level[1]),
+                                            float(self.level[2]))  # Загружаем позицию помощника-дроида.
 
+            # Примечание : на первых версиях игры этот дроид был ед. врагом, но теперь я сделал его помщником. А имя переменой осталось.
+
+            # если не включена другая камера, то:
             if not self.another_camera:
-                if self.basic_droid:
-                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid.egg", 1, self.droidStartPos) # Загружаем модель игрока (созданная в blender)
-                elif self.pod_droid :
-                    self.droid = GameApi.object(self, "./models/pod/pod.egg", 0.5, self.droidStartPos)
+                if self.basic_droid:  # если включен стандартный дроид, то :
+                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid.egg", 1,
+                                                self.droidStartPos)  # Загружаем модель игрока
+                elif self.pod_droid:  # если включен большой дроид, то :
+                    self.droid = GameApi.object(self, "./models/pod/pod.egg", 0.5,
+                                                self.droidStartPos)  # загружаем модель большого дроида игрока
 
-                elif self.shield_droid:
-                    self.shield_sound.play() # играем звук щита.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid-lowres.egg", 1, self.droidStartPos)
+                elif self.shield_droid:  # если включен дроид с щитом, то:
+                    self.shield_sound.play()  # играем звук щита.
+                    self.droid = GameApi.object(self, "./models/BasicDroid/BasicDroid-lowres.egg", 1,
+                                                self.droidStartPos)  # Загружаем модель игрока с щитом.
 
             else:
-                self.droid = render.attachNewNode("body")
-                self.droid.setPos(self.droidStartPos)
-                base.cam.reparentTo(self.droid)
-                    
-            self.enemy = GameApi.object(self, "./models/pod/pod.egg", 0.5, self.enemyStartPos) # Загружаем модель помощника (созданная в blender)
-            if self.single:
-                self.enemy.hide()
+                self.droid = render.attachNewNode("body")  # подключаем дроида к рендеру
+                self.droid.setPos(self.droidStartPos)  # ставим стартовую позицию дроида
+                base.cam.reparentTo(self.droid)  # перемещаем камеру в... САМОГО ДРОИДА?!...
 
-            self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 1 # Позиция пушки
-            self.sword_pos = self.droid.getX(), self.droid.getY() + 0.1, 1 # Позиция пушки
-            
-            # Используем мультипроцесинг, чтобы оптимизировать нашу игру.
-            with Pool(processes=10) as pool:
-            
-                self.weapon = GameApi.object(self, './models/BasicDroid/sniper.egg', .5, self.weapon_pos) # загрузим оружие
-                
-                self.bullet = GameApi.object(self, './models/spike/spike.egg', .5, (0, 0, 0)) # Загрузим пулю
-                self.flash = GameApi.object(self, './models/whishlyflash/handlamp.egg', .5, (0, 0, 0)) # Загрузим фонарик
-                self.planet = GameApi.object(self, './models/pod/pod.egg', 50, (0, -1000, 0))
-                self.crosshair = GameApi.object(self, './models/crosshair/crosshair.egg', 1, (self.droidStartPos))
-                self.grenade = GameApi.object(self, './models/grenade/Grenade.egg', 1, (3, 3, 0.3))
-                self.fragment = GameApi.object(self, './models/fragment/Fragment.egg', 1, (5, 3, 0.3))
+            self.enemy = GameApi.object(self, "./models/pod/pod.egg", 0.5,
+                                        self.enemyStartPos)  # Загружаем модель помощника (созданная в blender)
+            if self.single:  # если включена одиночная игра - убираем дроида помощника
+                self.enemy.hide()  # убираем
 
-                # вражеский истребитель
-                self.fighter = GameApi.object(self, './models/fighter/fighter.egg', 1, (0, 90 , 0)) # загрузим модельку истребителя
+            self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 1  # Позиция пушки
+            self.sword_pos = self.droid.getX(), self.droid.getY() + 0.1, 1  # Позиция мЕча
 
-                self.cube = GameApi.object(self, './models/block/crate.egg', .7, (0, 0, 0)) # загружаем блок
-                self.cube.hprInterval(1.5, (360, 360, 360)).loop()
+            self.weapon = GameApi.object(self, './models/BasicDroid/sniper.egg', .5, self.weapon_pos)  # загрузим оружие
+
+            self.bullet = GameApi.object(self, './models/spike/spike.egg', .5, (0, 0, 0))  # Загрузим пулю
+            self.flash = GameApi.object(self, './models/whishlyflash/handlamp.egg', .5, (0, 0, 0))  # Загрузим фонарик
+            self.planet = GameApi.object(self, './models/pod/pod.egg', 50, (0, -1000, 0))  # загружаем большого дроида
+            self.crosshair = GameApi.object(self, './models/crosshair/crosshair.egg', 1,
+                                            (self.droidStartPos))  # закружаем щит
+            self.grenade = GameApi.object(self, './models/grenade/Grenade.egg', 1, (3, 3, 0.3))  # загружаем гранату
+            self.fragment = GameApi.object(self, './models/fragment/Fragment.egg', 1,
+                                           (5, 3, 0.3))  # загрудаем фрагмент гранаты
+
+            # вражеский истребитель
+            self.fighter = GameApi.object(self, './models/fighter/fighter.egg', 1,
+                                          (0, 90, 0))  # загрузим модельку истребителя
+
+            self.cube = GameApi.object(self, './models/block/crate.egg', .7, (0, 0, 0))  # загружаем блок
+            self.cube.hprInterval(1.5, (360, 360, 360)).loop()
 
             self.Intervalcube = self.cube.posInterval(13,
-                                                    Point3(0, -1500, 0),
-                                                    startPos=Point3(0, 10, 0))  # вращаем блок
-            
-            self.Intervalcube.loop() # делаем позу блока вращением
+                                                      Point3(0, -1500, 0),
+                                                      startPos=Point3(0, 10, 0))  # вращаем ящик(он слетает с корабля)
+
+            self.Intervalcube.loop()  # делаем позу ящика вращением
 
             # Врашение планеты
-            self.planet.hprInterval(550, (360, 360, 0)).loop()
-            
-            self.spotlight = camera.attachNewNode(Spotlight("spotlight")) # Конфиги фонарика
-            self.spotlight.node().setColor((.3, .3, .3, 1))
-            self.spotlight.node().setSpecularColor((0, 0, 0, 1))
+            self.planet.hprInterval(550, (360, 360, 0)).loop()  # "поза" вращения планеты
 
-            self.floater = NodePath(PandaNode("floater")) 
-            self.floater.reparentTo(self.droid)
-            self.floater.setZ(2.0)
+            self.spotlight = camera.attachNewNode(Spotlight("spotlight"))  # Конфиги фонарика
+            self.spotlight.node().setColor((.3, .3, .3, 1))  # цвет фонарика
+            self.spotlight.node().setSpecularColor((0, 0, 0, 1))  # цвет отражения
 
-            self.accept("escape", self.exit) # При нажатии клавиши Esc выходим.
-            
-            self.accept("arrow_left", self.setKey, ["left", True]) # При кнопке влево - поворачиваем игрока влево
-            self.accept("arrow_right", self.setKey, ["right", True]) # При кнопке вправо - поворачиваем игрока вправо
-            self.accept("arrow_up", self.setKey, ["forward", True]) # При кнопке вперёд - идём вперёд
-            self.accept("a", self.setKey, ["cam-left", True]) # При кнопке a - разворачиваем камеру вокруг нашей модельки
-            self.accept("d", self.setKey, ["cam-right", True]) # При кнопке s - разворачиваем камеру вокруг нашей модельки
-            self.accept("arrow_left-up", self.setKey, ["left", False]) # При кнопке вверх+влево - поворачиваем игрока влево и идём вперёд
-            self.accept("arrow_right-up", self.setKey, ["right", False]) # При кнопке вверх+право - поворачиваем игрока вправо и идём вперёд
-            self.accept("arrow_up-up", self.setKey, ["forward", False]) # При кнопке вверх+вверъ - идём вперёд и идём вперёд
-            self.accept("a-up", self.setKey, ["cam-left", False]) # При кнопке a+вперёд - поворачиваем камеру влево и идём вперёд
-            self.accept("d-up", self.setKey, ["cam-right", False]) # При кнопке s+вперёд - поворачиваем камеру вправо и идём вперёд
+            self.floater = NodePath(PandaNode("floater"))  # создаем нод
+            self.floater.reparentTo(self.droid)  # подключаем нод к модели дроида игрока
+            self.floater.setZ(
+                2.0)  # глубина(если вы не понимайте, о чем я, прочитайте в википедии о левосторонней системе координат)
 
-            self.accept("space", self.shot) # при пробеле стреляем
-            self.accept("s", self.toggleLights, [[self.spotlight]]) # При кнопке s - включить фонарик
-            self.accept("w", self.weapon_hide) # при кнопке w - уберём оружие.
-            self.accept("p", self.cursor) # при кнопке p - покажем прмцел снафпера
-            self.accept("g", self.grenade_snade) # при кнопке g - кидаем гранату
+            self.accept("escape", self.exit)  # При нажатии клавиши Esc выходим.
 
-            base.enableParticles() # Включаем инициализацию дыма
-            self.p = ParticleEffect() # Включим эффект дыма
-            self.accept('f', self.particle_start) # при нажатии f(от force) -  загрузим файл дыма и переместим в конфиг чтобы именно эта анимация стала отображением дыма
-            self.accept('0', self.fountain) # при  нажатии кнопок f+o(fountain) включим пожаротушительную систему
-            if self.single: # если мы находимся в диночной игре, то можно включать полигольный режим.
-                self.accept('f3', self.toggleWireframe) # при нажатии f3 - включаем полигольный режим
-            self.accept('r', base.useTrackball) # если нажали r - делаем RPG режим.
+            self.accept("arrow_left", self.setKey, ["left", True])  # При кнопке влево - поворачиваем игрока влево
+            self.accept("arrow_right", self.setKey, ["right", True])  # При кнопке вправо - поворачиваем игрока вправо
+            self.accept("arrow_up", self.setKey, ["forward", True])  # При кнопке вперёд - идём вперёд
+            self.accept("a", self.setKey,
+                        ["cam-left", True])  # При кнопке a - разворачиваем камеру вокруг нашей модельки
+            self.accept("d", self.setKey,
+                        ["cam-right", True])  # При кнопке s - разворачиваем камеру вокруг нашей модельки
+            self.accept("arrow_left-up", self.setKey,
+                        ["left", False])  # При кнопке вверх+влево - поворачиваем игрока влево и идём вперёд
+            self.accept("arrow_right-up", self.setKey,
+                        ["right", False])  # При кнопке вверх+право - поворачиваем игрока вправо и идём вперёд
+            self.accept("arrow_up-up", self.setKey,
+                        ["forward", False])  # При кнопке вверх+вверх - идём вперёд и идём вперёд
+            self.accept("a-up", self.setKey,
+                        ["cam-left", False])  # При кнопке a+вперёд - поворачиваем камеру влево и идём вперёд
+            self.accept("d-up", self.setKey,
+                        ["cam-right", False])  # При кнопке s+вперёд - поворачиваем камеру вправо и идём вперёд
 
-            taskMgr.add(self.move, "moveTask") # Добавляем задачу в наш движок
+            self.accept("space", self.shot)  # при пробеле стреляем
+            self.accept("s", self.toggleLights, [[self.spotlight]])  # При кнопке s - включить фонарик
+            self.accept("w", self.weapon_hide)  # при кнопке w - уберём оружие.
+            self.accept("p", self.cursor)  # при кнопке p - покажем прмцел снайпера
+            self.accept("g", self.grenade_snade)  # при кнопке g - кидаем гранату
+
+            base.enableParticles()  # Включаем инициализацию дыма
+            self.p = ParticleEffect()  # Включим эффект дыма
+            self.accept('f',
+                        self.particle_start)  # при нажатии f(от force) -  загрузим файл дыма и переместим в конфиг чтобы именно эта анимация стала отображением дыма
+            self.accept('0', self.fountain)  # при  нажатии кнопок f+o(fountain) включим пожаротушительную систему
+            if self.single:  # если мы находимся в диночной игре, то можно включать полигольный режим.
+                self.accept('f3', self.toggleWireframe)  # при нажатии f3 - включаем полигольный режим
+            self.accept('r', base.useTrackball)  # если нажали r - делаем RPG режим.
+
+            taskMgr.add(self.move, "moveTask")  # Добавляем задачу в наш движок
 
             self.capture_flag = Capture_flag(player=self.droid,
-                                            base_1=self.environ,
-                                            base_2=self.planet)
+                                             base_1=self.environ,
+                                             base_2=self.planet)  # запускаем режим захвата флага
 
-            taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")
-            taskMgr.add(self.check_swipe, "CheckingSwipeOnDroid")
-            taskMgr.add(self.check_weapon_update, "checkweaponupdate")
-            taskMgr.add(self.engine_treshiny_check, "TreshinyWithEngineChecking")
+            # задачи для нашего рендера, а именно :
+            taskMgr.add(self.capture_flag_update, "CaptureFlagUpdating")  # общее обновление режима
+            taskMgr.add(self.check_swipe, "CheckingSwipeOnDroid")  # проверка на удар
+            taskMgr.add(self.engine_treshiny_check, "TreshinyWithEngineChecking")  # проверка на наличие трещин
 
-            self.isMoving = False # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
+            self.isMoving = False  # Ставим значение isMoving на False(Вы можете менять это значение) чтобы игрок изначально стоял.
             # Делаем так, чтобы свет был изначально выключен.
-            self.camera.setPos(self.droid.getX(), self.droid.getY() + 1, 3) # Ставим позицию камеры чуть больше позиции игрока
+            self.camera.setPos(self.droid.getX(), self.droid.getY() + 1,
+                               3)  # Ставим позицию камеры чуть больше позиции игрока
 
-            if not self.EN : # если язык не английский
-                self.state_info = MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+            if not self.EN:  # если язык не английский
+                self.state_info = MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                               font=self.font)  # Напишем сообщение о состоянии корабля
 
-            else : # если янглийский язык
-                self.state_info = MenuApi.text(self, text='machine :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                
-                    
-            self.check_loss() # Проверяем поражение
-            self.hide_weapon = False # Поставим, что оружие не убрано
+            else:  # если янглийский язык
+                self.state_info = MenuApi.text(self, text='machine :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                               font=self.font)  # Напишем сообщение о состоянии корабля
+
+            self.check_loss()  # Проверяем поражение
+            self.hide_weapon = False  # Поставим, что оружие не убрано
             self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) + self.speed, random.randrange(0, 5)
             self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)
 
-            self.motor_pos1 = 25.238849639892578, 8.962211608886719, 1.5 # позиция первого мотора
-            self.motor_pos2 = -20.676218032836914, 10.55816650390625, 1.5 # позиция второго мотора
+            self.motor_pos1 = 25.238849639892578, 8.962211608886719, 1.5  # позиция первого мотора
+            self.motor_pos2 = -20.676218032836914, 10.55816650390625, 1.5  # позиция второго мотора
 
-            self.motor1 = GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf', self.motor_pos1, self.environ) # мотор 1
-            self.motor2 = GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf', self.motor_pos2, self.environ) # мотор 2
+            self.motor1 = GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf',
+                                                     self.motor_pos1, self.environ)  # мотор 1
+            self.motor2 = GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf',
+                                                     self.motor_pos2, self.environ)  # мотор 2
 
-            self.state_info2 = MenuApi.text(self, text='', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-            self.state_droid_info = MenuApi.text(self, text=str(self.state_droid), pos=(-1.3, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии дроида
+            self.state_info2 = MenuApi.text(self, text='', pos=(-0.8, 0.8), scale=0.1,
+                                            font=self.font)  # Напишем сообщение о состоянии корабля
+            self.state_droid_info = MenuApi.text(self, text=str(self.state_droid), pos=(-1.3, 0.8), scale=0.1,
+                                                 font=self.font)  # Напишем сообщение о состоянии дроида
 
-            self.force = False # Поставим, что не разгонялись
+            self.force = False  # Поставим, что не разгонялись
 
-            self.light() # Свет
+            self.light()  # Свет
 
-            # солнце(новая механика освещения)
+            # солнце(новая механика освещения БЫЛА В ФЕВРАЛЕ 2021...)
             GameApi.light(self)
 
             # списки с обьектами
@@ -1681,95 +1903,105 @@ try :
                             self.enemy, self.weapon,
                             self.bullet, self.flash,
                             self.cube, self.crosshair]
-            
-            # все графические обьекты
-            self.gui_objects = [self.state_info, self.state_droid_info, self.state_info2]
+
+            if cursor_e:  # если курсор показан..
+                # все графические обьекты
+                self.gui_objects = [self.state_info, self.state_droid_info, self.state_info2,
+                                    self.cursor1, self.cursor2, cursor3, cursor4]
+
+            else:  # если не показан
+                self.gui_objects = [self.state_info, self.state_droid_info, self.state_info2]  # графические объекты
 
             # если не включили одиночную игру, добавляем в список графических обьектов кнопку чата
             if not self.single:
                 self.gui_objects.append(self.pg149)
-            
-            self.enemies = [self.enemy] # список врагов
+
+            self.enemies = [self.enemy]  # список врагов
 
             # Генерация врагов
             for e in range(0, 20):
-                enemy = GameApi.object(self, './models/pod/pod.egg', 0.5, (-26 - e, e, 1.5))
+                enemy = GameApi.object(self, './models/pod/pod.egg', 0.5,
+                                       (-26 - random.randrange(e, 30), random.randrange(e - 10, e), 1.5))
                 self.enemies.append(enemy)
 
             # если включена одиночная игра удаляем врагов
             for enemy in self.enemies:
                 if self.single:
-                    enemy.hide()
+                    enemy.destroy()
 
             # список гранат
             self.grenades = [
                 self.grenade]
 
-            # список обьектов
+            # список фрагментов от гранат
             self.fragments = [
                 self.fragment]
 
             # все обьекты, не поддающиюся эффектам
-            self.all_objects = self.objects + self.fragments + self.grenades + [self.sky, self.fighter, self.planet]
+            self.all_objects = self.objects + self.fragments + self.grenades + [self.sky, self.fighter, self.planet,
+                                                                                self.weapon]
 
-            self.rust_texture = loader.loadTexture('./tex/rust.png') # загружаем текстуру ржавчины
-            self.treshiny_texture = loader.loadTexture('./tex/treshiny.png') # загружаем текстуру трещин
+            self.rust_texture = loader.loadTexture('./tex/rust.png')  # загружаем текстуру ржавчины
+            self.treshiny_texture = loader.loadTexture('./tex/treshiny.png')  # загружаем текстуру трещин
 
             # Шейдеры
-            GameApi.shaders(self, vert="./shaders/realistic/bloom.glsl", frag="./shaders/realistic/blur.glsl")
-            GameApi.shaders(self, vert="./shaders/realistic/outline.glsl", frag="./shaders/realistic/repeat.glsl")
-            GameApi.shaders(self, vert="./shaders/realistic/glow.glsl", frag="./shaders/realistic/grayscale.glsl")
-            GameApi.shaders(self, vert="./shaders/realistic/shadow.frag", frag="./shaders/realistic/shadow.vert")
-            
+            GameApi.shaders(self, vert="./shaders/realistic/bloom.glsl", frag="./shaders/realistic/blur.glsl")  # blur
+            GameApi.shaders(self, vert="./shaders/realistic/outline.glsl",
+                            frag="./shaders/realistic/repeat.glsl")  # шейдер для повторения
+            GameApi.shaders(self, vert="./shaders/realistic/glow.glsl",
+                            frag="./shaders/realistic/grayscale.glsl")  # грайскайл
+            GameApi.shaders(self, vert="./shaders/realistic/shadow.frag",
+                            frag="./shaders/realistic/shadow.vert")  # тени
+
             # Если  игрок захотел поиграть в чёрнобелую игру, проверим это
-            if self.GB :        
-                GameApi.shaders(self, "./shaders/lighting.vert", "./shaders/lighting.frag") # теперь шейдеры работают!
-                #render.set_shader(Shader.load(Shader.SL_GLSL, "./shaders/terrain.vert.glsl", "./shaders/terrain.frag.glsl"))
+            if self.GB:
+                sending(f'Start green-black mode! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                GameApi.shaders(self, "./shaders/lighting.vert", "./shaders/lighting.frag")  # чернобелые шейдеры
 
         def engine_treshiny_check(self, task):
             '''функция для проверки корабля на трещины'''
-            if self.environ.getPos() == self.planet.getPos(): # если корабль врезался в планету...
-                self.environ.setTexture(self.treshiny_texture) # накладываем на него текстуру трещин
-        
-        def check_weapon_update(self, task):
-            '''функция для проверки выбора оружия'''
-            #self.weapon_choosed = self.weapons_gui.check_weapon() # проверяем выбранное оружие
-            if not weapon_choosed : # проверим, если выбрали пистолет
-                self.weapon.hide() # удаляем прередущие оружие
-                self.weapon = GameApi.object(self, './models/BasicDroid/pistol.egg', .5, self.weapon_pos) # обновим оружие
-                
+            if self.environ.getPos() == self.planet.getPos():  # если корабль врезался в планету...
+                self.environ.setTexture(self.treshiny_texture)  # накладываем на него текстуру трещин
+
         def capture_flag_update(self, task):
-            self.result = self.capture_flag.update() # обновляем результат захвата флага
-            if self.result: # проверяем результат
-                print('You WIN!!!') # печатаем результат
-                self.start_new_game() # запускаем новую игру
+            self.result = self.capture_flag.update()  # обновляем результат захвата флага
+            if self.result:  # проверяем результат
+                sending(f'WIN capture flag! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                print('You WIN!!!')  # печатаем результат
+                self.rating += 10  # добавляем очки рейтинга
+                update_file(directory_='./profile', filename_p_='rating.txt', value=str(self.rating), name='rating')
+                self.start_new_game()  # запускаем новую игру
 
         def check_swipe(self, task):
             '''проверяем удар по дроиду'''
-            if self.droid.getPos() == self.enemy.getPos(): # проверяем : если дроид игрока ударился об вражеского то...
-                if not self.EN :
-                    self.state_info.getText('сильный удар!') # сообщение об ударе
-                else :
+
+            if self.droid.getPos() == self.enemy.getPos():  # проверяем : если дроид игрока ударился об вражеского то...
+                sending(f'Big swipe! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                if not self.EN:
+                    self.state_info.getText('сильный удар!')  # сообщение об ударе
+                else:
                     self.state_info.getText('swipe!')
 
-                self.state_droid -= 5 # вычитаем очки из жизней дроида
-                self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
+                self.state_droid -= 5  # вычитаем очки из жизней дроида
+                self.state_droid_info.setText(str(self.state_droid))  # обновление состояния дроида
 
         def start_new_game(self):
+            sending(f'Started new game {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             '''запуск новой игры'''
-            self.droid.setPos(self.droidStartPos) # ставим обычную позицию дроида
-            self.droid.setPos(self.enemyStartPos) # ставим обычную позицию врага
-            
-        
+            self.droid.setPos(self.droidStartPos)  # ставим обычную позицию дроида
+            self.enemy.setPos(self.enemyStartPos)  # ставим обычную позицию врага
+
         def _grenade_boom(self):
+            sending(f'Grenade is boom {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # играем звуки гранаты
-            self.grenade_launch.play()
-            self.grenade_boun.play()
-            self.grenade_boom.play()
-        
+            for l in range(0, 10):
+                self.grenade_launch.play()  # играем звуки пикания в цикле, т. к. это и будет время чтобы убежать от нее
+            self.grenade_boun.play()  # недовзрыв
+            self.grenade_boom.play()  # взрыв xDDDDD
+
             # Добавляем в список гранат гранату(ЛОГИКА:))
             self.grenades.append(self.grenade)
-            # То же самое со списком фрагментов
+            # Тоже самое со списком фрагментов
             self.fragments.append(self.fragment)
 
             # оптимизация
@@ -1783,25 +2015,29 @@ try :
                     self.fragments.pop()
 
         def grenade_snade(self):
+            sending(f'Grenade {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Создаём обьект гранаты рядом с дроидом
-            self.grenade = GameApi.object(self, 'models/grenade/Grenade.egg', 1, (self.droid.getX() - 5, self.droid.getY() - 3, 0))
-            
+            self.grenade = GameApi.object(self, 'models/grenade/Grenade.egg', 1,
+                                          (self.droid.getX() - 1, self.droid.getY() - 2, 0))
+
             # эффект горения
-            GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf', self.grenade.getPos(), self.environ)
-        
+            GameApi.loadParticleConfig(self, './special_effects/steam_critic+/fireish.ptf', self.grenade.getPos(),
+                                       self.environ)
 
             # Создаём фрагмент железа
-            self.fragment = GameApi.object(self, 'models/fragment/Fragment.egg', 1, (self.droid.getX(), self.droid.getY(), 0))
-            self.fragment.hide() # не показываем фрагмент
+            self.fragment = GameApi.object(self, 'models/fragment/Fragment.egg', 1,
+                                           (self.droid.getX(), self.droid.getY(), 0))
+            self.fragment.hide()  # не показываем фрагмент
 
             # Проверка условия : Если дроид рядом с гранатой, то вылетает железный фрагмент : якобы от дооида.
             if (self.droid.getX() - self.fragment.getX()) < 1 or (self.droid.getY() - self.fragment.getY()) < 1:
-                self.fragment.show() # показываем фрагмент
-            
-            self._grenade_boom() # взрываем гранату
+                self.fragment.show()  # показываем фрагмент
+
+            self._grenade_boom()  # взрываем гранату
 
         def light_shader(self):
-            '''Включение шейдера горения'''
+            '''Включение шейдера горения'''  # *ОН ОЧЕНЬ КРАСИВЫЙ, И ИДЕТ ДАЖЕ НА RX 480 И ВСТРОЕННЫЙ В XEON ГП!*(у меня GTX 1650)
+            sending(f'Started light pro shder {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             return Shader.make(Shader.SL_GLSL, vertex="""
                 #version 120
 
@@ -1818,14 +2054,14 @@ try :
                 {
                     gl_Position    = p3d_ModelViewProjectionMatrix * p3d_Vertex;
                     gl_TexCoord[0].xy = p3d_MultiTexCoord0;
-                    
+
                     v_FragmentPosition  = p3d_Vertex.xyz;
                     v_FragmentNormal  = p3d_Normal;
                 }
 
                 """,
 
-                fragment="""
+                               fragment="""
                 #version 120
 
                 uniform sampler2D p3d_Texture0;
@@ -1862,11 +2098,11 @@ try :
 
                     float diffuse = clamp( dot( L, N ), 0.0, 1.0 );
                     float specular  = pow( clamp( dot( N, H ), 0.0, 1.0 ), k_Shininess );
-                
+
                     if( diffuse <= 0.0 ){
                         specular = 0.0; 
                         }
-                
+
                     vec4 diffuseColor  = diffuse * k_LightColor * attenuation;
                     vec4 specularColor = specular * k_LightColor * attenuation;
                     vec4 ambientColor = vec4(0.01, 0.01, 0.01, 0.01);
@@ -1877,93 +2113,113 @@ try :
                 """)
 
         def particle_start(self):
-            self.command_sound.play()
-            if not self.pro_machine :
-                self.force = True # Поставим, что мы уже разгонялись
+            sending(f'Started particle {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+            self.command_sound.play()  # играем звук  команды
+            if not self.pro_machine:  # если не включено про управление
+                self.force = True  # Поставим, что мы уже разгонялись
 
-                self.state -= 1 # сделаем меньше очков
-                self.state_info.hide() # удалим текстовые очки
+                self.state -= 1  # сделаем меньше очков
+                self.state_info.destroy()  # удалим текстовые очки
 
                 for i in range(len(self.objects)):
                     object = self.objects[i]
                     object.setY(object.getY() - self.speed)
-                
+
                 if self.state != 10 and self.state > 10:
-                    self.state_info.hide() # убираем предедущее сообщение о жизнях корабля
-                    self.state_info = MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    self.check_loss() # проверяем поражение
-                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (self.speed - 100), random.randrange(0, 1)
-                    GameApi.loadParticleConfig(self, 'special_effects/steam/steam.ptf', self.steam_pos, self.environ) 
-                    self.errorSound.play() # играем звук ошибки
-                    self.state_info2.hide() # убираем предедущее сообщение
-                    
-                    if not self.EN :
-                        self.state_info2 = MenuApi.text(self, text='двигатель неисправен', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    else :
-                        self.state_info2 = MenuApi.text(self, text='motor error', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+                    self.state_info.destroy()  # убираем предедущее сообщение о жизнях корабля
+                    self.state_info = MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                                   font=self.font)  # Напишем сообщение о состоянии корабля
+                    self.check_loss()  # проверяем поражение
+                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (
+                                self.speed - 100), random.randrange(0, 1)
+                    GameApi.loadParticleConfig(self, 'special_effects/steam/steam.ptf', self.steam_pos, self.environ)
+                    self.errorSound.play()  # играем звук ошибки
+                    self.state_info2.destroy()  # убираем предедущее сообщение
 
-                        
+                    if not self.EN:
+                        self.state_info2 = MenuApi.text(self, text='двигатель неисправен', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
+                    else:
+                        self.state_info2 = MenuApi.text(self, text='motor error', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
+
+
                 else:
-                    self.state_info = MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    self.check_loss() # проверяем поражение
-                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (self.speed - 100), random.randrange(0, 1)
-                    GameApi.loadParticleConfig(self, 'special_effects/steam_critic/steam.ptf', self.steam_pos, self.environ)
-                    self.errorSound.play() # играем звук ошибки
-                    self.state_info2.hide()  # убираем предедущее сообщение
+                    self.state_info = MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                                   font=self.font)  # Напишем сообщение о состоянии корабля
+                    self.check_loss()  # проверяем поражение
+                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (
+                                self.speed - 100), random.randrange(0, 1)
+                    GameApi.loadParticleConfig(self, 'special_effects/steam_critic/steam.ptf', self.steam_pos,
+                                               self.environ)
+                    self.errorSound.play()  # играем звук ошибки
+                    self.state_info2.destroy()  # убираем предедущее сообщение
 
-                    if not self.EN :
-                        self.state_info2 = MenuApi.text(self, text='критическое состояние', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    else :
-                        self.state_info2 = MenuApi.text(self, text='critic state', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-            
+                    if not self.EN:
+                        self.state_info2 = MenuApi.text(self, text='критическое состояние', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
+                    else:
+                        self.state_info2 = MenuApi.text(self, text='critic state', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
+
                 if self.state < 10:
                     self.alarm_sound.play()
-                    self.state_info.hide()
-                    self.state_info = MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    self.check_loss() # проверяем поражение
-                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (self.speed - 100), random.randrange(0, 5)
-                                                                                    
-                    GameApi.loadParticleConfig(self, 'special_effects/steam_critic+/fireish.ptf', self.steam_pos, self.environ)
-                    self.errorSound.play() # играем звук ошибки
-                    self.state_info2.hide() # убираем предедущее сообщение
+                    self.state_info.destroy()
+                    self.state_info = MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                                   font=self.font)  # Напишем сообщение о состоянии корабля
+                    self.check_loss()  # проверяем поражение
+                    self.steam_pos = random.randrange(0, 5), random.randrange(0, 5) - (
+                                self.speed - 100), random.randrange(0, 5)
 
-                    if not self.EN :
-                        self.state_info2 = MenuApi.text(self, text='падаем!', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    else :
-                        self.state_info2 = MenuApi.text(self, text='fall!', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+                    GameApi.loadParticleConfig(self, 'special_effects/steam_critic+/fireish.ptf', self.steam_pos,
+                                               self.environ)
+                    self.errorSound.play()  # играем звук ошибки
+                    self.state_info2.destroy()  # убираем предедущее сообщение
+
+                    if not self.EN:
+                        self.state_info2 = MenuApi.text(self, text='падаем!', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
+                    else:
+                        self.state_info2 = MenuApi.text(self, text='fall!', pos=(-0.8, 0.8), scale=0.1,
+                                                        font=self.font)  # Напишем сообщение о состоянии корабля
 
                     # Вращаем обьекты в колрабле и сам корабль
                     self.environ.hprInterval(50, (360, 360, 0)).loop()
                     self.droid.hprInterval(50, (360, 360, 0)).loop()
                     self.enemy.hprInterval(50, (360, 360, 0)).loop()
 
-            else :
-                if not self.EN :
-                    self.pro_info = MenuApi.text(self, text='ПРОФИ!', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о том что вы профи :)
-                    
-                else :
-                    self.pro_info = MenuApi.text(self, text='PRO!', pos=(-0.8, 0.8), scale=0.1, font=self.font) # Напишем сообщение о том что вы профи :)
-                    
+            else:
+                if not self.EN:
+                    self.pro_info = MenuApi.text(self, text='ПРОФИ!', pos=(-0.8, 0.8), scale=0.1,
+                                                 font=self.font)  # Напишем сообщение о том что вы профи :)
+
+                else:
+                    self.pro_info = MenuApi.text(self, text='PRO!', pos=(-0.8, 0.8), scale=0.1,
+                                                 font=self.font)  # Напишем сообщение о том что вы профи :)
+
                 self.pro_machine_engine()
 
         def pro_machine_engine(self):
             '''Професиональная механика корабля'''
+            sending(f'Started Djoystic {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Тут нужен джойстик. Если его у вас нет, увы вы не сможете использовать этот режим.
             self.mgr = InputDeviceManager.get_global_ptr()
             for device in self.mgr.get_devices():
                 self.gamepad = device
 
-            MenuApi.text(self, text=str(self.gamepad), pos=(-1.6, -0.9), scale=0.05, font=self.font) # найденое устройство
-            
+            MenuApi.text(self, text=str(self.gamepad), pos=(-1.6, -0.9), scale=0.05,
+                         font=self.font)  # найденое устройство
+
             # Управление джойстиком
             taskMgr.add(self.moveTaskDjoystic, "moveTaskDjoystic")
-            
-        def reset(self):
 
+        def reset(self):
+            sending(f'Reseting camera position! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             self.camera.setPosHpr(0, -200, 10, 0, 0, 0)
             self.environ.setPosHpr(0, -200, 9, 0, 0, 0)
 
         def moveTaskDjoystic(self, task):
+            sending(f'Started pro mode of control {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             dt = globalClock.getDt()
 
             strafe_speed = 85
@@ -2000,44 +2256,49 @@ try :
             return task.cont
 
         def fountain(self):
-            self.state_info2.hide() # убираем текст опасности
+            self.state_info2.destroy()  # убираем текст опасности
+            sending(f'Started fountain {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             if self.force:
                 if self.state != 100:
                     self.state += 1
-                    self.state_info.hide()
-                    self.state_info = MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
+                    self.state_info.destroy()
+                    self.state_info = MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                                   font=self.font)  # Напишем сообщение о состоянии корабля
 
-                self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)    
-                GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos, self.environ)
+                self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)
+                GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos,
+                                           self.environ)
                 if self.fountain_pos == self.droid.getPos():
-                    self.rust_effect = True # включаем эффект ржавчины
+                    self.rust_effect = True  # включаем эффект ржавчины
                     # если не включен английский язык
                     if not self.EN:
-                        self.state_info.setText('РЖАВЧИНА!') # сообщение на русском
+                        self.state_info.setText('РЖАВЧИНА!')  # сообщение на русском
                     # если включен английский язык
                     else:
-                        self.state_info.setText('RUST!') # сообщение на русском
+                        self.state_info.setText('RUST!')  # сообщение на русском
 
-                    self.state_droid -= 10 # отнимаем здоровье у дроида
-                    self.state_droid_info.setText(str(self.state_droid)) # обновление состояния дроида
+                    self.state_droid -= 10  # отнимаем здоровье у дроида
+                    self.state_droid_info.setText(str(self.state_droid))  # обновление состояния дроида
 
-                    self.droid.setTexture(self.rust_texture) # накладываем ржавчину на дроида
-                    self.weapon.setTexture(self.rust_texture) # накладываем ржавчину на оружие
+                    self.droid.setTexture(self.rust_texture)  # накладываем ржавчину на дроида
+                    self.weapon.setTexture(self.rust_texture)  # накладываем ржавчину на оружие
 
-            else :
+            else:
                 if self.state != 100:
                     self.state += 1
-                    self.state_info.hide()
+                    self.state_info.destroy()
                     if not self.EN:
-                        MenuApi.text(self, text='корабль :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля
-                    else :
-                        MenuApi.text(self, text='machine :' + str(float(self.state)), pos=(0.5, 0.8), scale=0.1, font=self.font) # Напишем сообщение о состоянии корабля ON ENGLISH
+                        MenuApi.text(self, text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                     font=self.font)  # Напишем сообщение о состоянии корабля
+                    else:
+                        MenuApi.text(self, text='machine :' + str(self.state), pos=(0.5, 0.8), scale=0.1,
+                                     font=self.font)  # Напишем сообщение о состоянии корабля ON ENGLISH
                     #self.state_info = OnscreenText(text='корабль :' + str(self.state), pos=(0.5, 0.8), scale=0.1, fg=(1, 1, 1, 1), align=TextNode.ALeft, font=self.font) # Напишем сообщение о состоянии корабля
 
-                self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)    
-                GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos, self.environ)
-            
-            
+                self.fountain_pos = random.randrange(0, 5), random.randrange(0, 5), random.randrange(0, 1)
+                GameApi.loadParticleConfig(self, 'special_effects/fountain/fountain.ptf', self.fountain_pos,
+                                           self.environ)
+
         def light(self):
             # Окрущающее освещение
             ambientLight = AmbientLight("ambientLight")
@@ -2051,6 +2312,7 @@ try :
             render.setLight(render.attachNewNode(directionalLight))
 
         def weapon_hide(self):
+            sending(f'Weapon hided! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Убрать оружие
             self.change_weapon_sound.play()
             self.hide_weapon = True
@@ -2064,199 +2326,267 @@ try :
                         render.clearLight(light)
                     else:
                         render.setLight(light)
-                
+
                 self.flash.setPos(self.weapon_pos)
             else:
                 return
 
-
         def shot(self):
-            dt = globalClock.getDt() + 0.5 # Cкорость движения
-            if not self.hide_weapon : # если оружие убрано то мы не можем стрелять
-                self.shotSound.play() # играем звук выстрела
-                self.bullet.setPos(self.weapon_pos) # Пуля будет спавнится внутри пушки
-                self.bullet.setY(self.bullet, 100 * dt) # Сдвигаем пулю на огромной скорости вперёд
+            '''выстрел'''
+            sending(f'Shot! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+            dt = globalClock.getDt() + 0.5  # Cкорость движения
+            if not self.hide_weapon:  # если оружие убрано то мы не можем стрелять
+                self.shotSound.play()  # играем звук выстрела
+                self.bullet.setPos(self.weapon_pos)  # Пуля будет спавнится внутри пушки
+                self.bullet.setY(self.bullet, 100 * dt)  # Сдвигаем пулю на огромной скорости вперёд
 
-                for object in self.objects:
-                    if object != self.droid and object != self.weapon and object != self.bullet:
-                        if self.bullet.getY() == object.getY():
-                            object.hide()
-            else :
-                self.kamikaze_sound.play()
+                for object_ in self.objects:  # проверяем попадание пули по какому либо объекту
+                    if object_ != self.droid and object_ != self.weapon and object_ != self.bullet:  # если обьект это не сам дроид не оружие и не сама пуля...
+                        if self.bullet.getY() == object_.getY() or self.bullet.getX() == object_.getX():  # проверяем позицию
+                            object_.hide()  # если попали - объект удаляется
+            else:
+                self.kamikaze_sound.play()  # а если оружия нет, включаем камикадзе
 
         def check_loss(self):
-            if self.state == 0: # если жизней у корабля не осталось
-                self.weapon_hide() # уберём оружие
-                if not self.EN :
+            if self.state == 0:  # если жизней у корабля не осталось
+                self.weapon_hide()  # уберём оружие
+                if not self.EN:
                     self.info = MenuApi.text(self, text='поражение', font=self.font,
-                                    pos=(-1.3, -0.5), scale=0.3) # напишем о поражении
-                else :
+                                             pos=(-1.3, -0.5), scale=0.3)  # напишем о поражении
+                    sending(f'Loss! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                else:
+                    sending(f'Loss! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     self.info = MenuApi.text(self, text='LOSS', font=self.font,
-                                    pos=(-1.3, -0.5), scale=0.3) # напишем о поражении
-                self.crackSound.play() # играем звук взрыва
+                                             pos=(-1.3, -0.5), scale=0.3)  # напишем о поражении
+                self.crackSound.play()  # играем звук взрыва
 
         def check_win(self):
             '''Проверка победы'''
             if (self.droid.getX(), self.droid.getY()) == (self.planet.getX(), self.planet.getY()):
-                if not self.EN :
+                sending(f'Win! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                if not self.EN:
                     self.info = MenuApi.text(self, text='победа', font=self.font,
-                                    pos=(-1.3, -0.5), scale=0.3)
-                else :
+                                             pos=(-1.3, -0.5), scale=0.3)  # пишем о победе(на рус)
+
+                    self.rating += 5  # добавляем рейтинга
+                    update_file(directory_='./profile', filename_p_='rating.txt', value=str(self.rating),
+                                name='rating')  # обновляем игровое значение рейтинга
+                else:
                     self.info = MenuApi.text(self, text='WIN', font=self.font,
-                                    pos=(-1.3, -0.5), scale=0.3)
+                                             pos=(-1.3, -0.5), scale=0.3)  # пишем о победе
+                    self.rating += 5  # добавляем рейтинга
+                    update_file(directory_='./profile', filename_p_='rating.txt', value=str(self.rating),
+                                name='rating')  # обновляем игрвое значение рейтинга
 
         def cursor(self):
+            global cursor1, cursor2, cursor3, cursor4, cursor_e  # делаем курсор глобальным
+            sending(f'Started pro sniper! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # Рисуем прицел
-            OnscreenText(text="||", style=1, fg=(1,1,1,1),pos=(0.0,0.03) , align=TextNode.ARight, scale = .07)
-            OnscreenText(text="||", style=1, fg=(1,1,1,1),pos=(0.0,-0.05), align=TextNode.ARight, scale = .07)
-            OnscreenText(text="==", style=1, fg=(1,1,1,1),pos=(-0.03,0.0), align=TextNode.ARight, scale = .07)
-            OnscreenText(text="==", style=1, fg=(1,1,1,1),pos=(0.055,0.0), align=TextNode.ARight, scale = .07)
+            cursor1 = OnscreenText(text="||", style=1, fg=(1, 1, 1, 1), pos=(0.0, 0.03), align=TextNode.ARight,
+                                   scale=.07)  # часть курсора 1
+            cursor2 = OnscreenText(text="||", style=1, fg=(1, 1, 1, 1), pos=(0.0, -0.05), align=TextNode.ARight,
+                                   scale=.07)  # часть курсора 2
+            cursor3 = OnscreenText(text="==", style=1, fg=(1, 1, 1, 1), pos=(-0.03, 0.0), align=TextNode.ARight,
+                                   scale=.07)  # часть курсора 3
+            cursor4 = OnscreenText(text="==", style=1, fg=(1, 1, 1, 1), pos=(0.055, 0.0), align=TextNode.ARight,
+                                   scale=.07)  # часть курсора 4
 
             # Перемещаем камеру рядом со снайпером
             self.camera.setPos(self.weapon.getX(), self.weapon.getY(), self.weapon.getZ())
 
+            # курсор теперь есть
+            cursor_e = True  # я же говорил, что есть!
+
+            return
+
         def easy_exit(self):
+            sending(f'Exited! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # обычный выход(из меню)
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
-            sys.exit() # просто системно выходим.
-        
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
+            sys.exit()  # просто системно выходим.
+
         def exit(self):
             # Выход из игры
-            self.click_sound.play() # играем звук клика
-            self.command_sound.play() # играем звук команды
+            self.click_sound.play()  # играем звук клика
+            self.command_sound.play()  # играем звук команды
 
             # проверим, включена ли одиночная игра
             if not self.single:
-                self.networking.removeClient(self.username) # удаляем игрока с сервера
+                self.networking.removeClient(self.username)  # удаляем игрока с сервера
 
-            self.exiting = True # поставим, что уже вышли из игры
-            
-            for o in self.all_objects: # удаляем все модели(абсолютно все)
+            self.exiting = True  # поставим, что уже вышли из игры
+
+            for o in self.all_objects:  # удаляем все модели(абсолютно все)
                 o.hide()
-            for g in self.gui_objects: # удаляем все графтческие обьекты
-                g.hide()
-                
-            self.weapons_gui.destroy() # удаляем меню оружий
-            
-            self.menu(True) # выходим в меню
-        
+            for g in self.gui_objects:  # удаляем все графuческие обьекты
+                g.destroy()
+
+            self.pistol_weapon.destroy()  # удаляем меню оружий
+
+            self.menu(True)  # выходим в меню
+
         def setKey(self, key, value):
-            self.keyMap[key] = value # Делаем мехaнuзм нажатия клавиш.
+            sending(f'Keys complete! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+            self.keyMap[key] = value  # Делаем мехaнuзм нажатия клавиш.
 
         def move(self, task):
-
+            sending(f'Moving! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             ''' Делаем фуцнкцию движения игрока '''
 
-            dt = globalClock.getDt() - .005 # Cкорость движения
+            dt = globalClock.getDt() - .005  # Cкорость движения
 
             # Поворот камеры влево и вправо
 
             if self.keyMap["cam-left"]:
-                self.camera.setX(self.camera, -10 * dt) # Меняем положеника камеры по икс. Таким образом получается илюзия поворота угла луча. Но на самом деле камера просто перемещается.
+                sending(f'Left camera! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                self.camera.setX(self.camera,
+                                 -10 * dt)  # Меняем положеника камеры по икс. Таким образом получается илюзия поворота угла луча. Но на самом деле камера просто перемещается.
             if self.keyMap["cam-right"]:
-                self.camera.setX(self.camera, + 10 * dt) # Тоже самое, что и наверху.
+                sending(f'Right camera! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                self.camera.setX(self.camera, + 10 * dt)  # Тоже самое, что и наверху.
 
-            startpos = self.droid.getPos() # Сделаем удобную переменную позиции игрока
+            startpos = self.droid.getPos()  # Сделаем удобную переменную позиции игрока
 
             if self.keyMap["left"]:
+                sending(f'Rotate left droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                 if not self.rust_effect:
                     self.droid.setH(self.droid.getH() + 145 * dt)
                     self.crosshair.setH(self.crosshair.getH() + 145 * dt)
                     self.weapon.setH(self.weapon.getH() + 145 * dt)
                     self.enemy.setY(self.enemy, -1 * dt)
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
-                if self.rust_effect : # если дроид заржавел, ...
+                if self.rust_effect:  # если дроид заржавел, ...
+                    sending(f'Rotate left droid with rust! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     self.droid.setH(self.droid.getH() + 85 * dt)
                     self.crosshair.setH(self.crosshair.getH() + 85 * dt)
                     self.weapon.setH(self.weapon.getH() + 85 * dt)
                     self.enemy.setY(self.enemy, -1 * dt)
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
                 # движение врагов
                 for e in self.enemies:
+                    sending(f'Moving enemy {e}! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     bot(enemy=e, dt=dt)
-                
+
             if self.keyMap["right"]:
+                sending(f'Rotate right droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                 if not self.rust_effect:
                     self.droid.setH(self.droid.getH() - 145 * dt)
                     self.crosshair.setH(self.crosshair.getH() - 145 * dt)
                     self.weapon.setH(self.weapon.getH() - 145 * dt)
                     self.enemy.setY(self.enemy, -1 * dt)
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
-                if self.rust_effect : # если дроид заржавел, ...
+                if self.rust_effect:  # если дроид заржавел, ...
+                    sending(f'Rotate right droid with rust! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     self.droid.setH(self.droid.getH() - 85 * dt)
                     self.crosshair.setH(self.crosshair.getH() - 85 * dt)
                     self.weapon.setH(self.weapon.getH() - 85 * dt)
                     self.enemy.setY(self.enemy, -1 * dt)
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
                 # движение врагов
                 for e in self.enemies:
                     bot(enemy=e, dt=dt)
-                
+
             if self.keyMap["forward"]:
+                sending(f'Forward moving droid! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                 if not DEVELOP_MODE:
-                    self.droid.setY(self.droid, -25 * dt) # перемещаем дроида
-                    self.crosshair.setY(self.crosshair, -25 * dt) # перемещаем круг над дроидом
-                    self.enemy.setX(self.enemy, 1 * dt) # перемещаем врага
-                    self.check_win() # Проверяем победу
+                    sending(
+                        f'Forward moving droid without DEVELOP mode! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                    self.droid.setY(self.droid, -25 * dt)  # перемещаем дроида
+                    self.crosshair.setY(self.crosshair, -25 * dt)  # перемещаем круг над дроидом
+                    self.enemy.setX(self.enemy, 1 * dt)  # перемещаем врага
+                    self.check_win()  # Проверяем победу
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
-                    if self.rust_effect : # если дроид заржавел, ...
-                        self.droid.setY(self.droid, -10 * dt) # перемещаем дроида
-                        self.crosshair.setY(self.crosshair, -10 * dt) # перемещаем круг над дроидом
-                        self.enemy.setX(self.enemy, 1 * dt) # перемещаем врага
-                        self.check_win() # Проверяем победу
+                    if self.rust_effect:  # если дроид заржавел, ...
+                        sending(
+                            f'Forward moving droid with DEVELOP mode and rust effect! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                        self.droid.setY(self.droid, -10 * dt)  # перемещаем дроида
+                        self.crosshair.setY(self.crosshair, -10 * dt)  # перемещаем круг над дроидом
+                        self.enemy.setX(self.enemy, 1 * dt)  # перемещаем врага
+                        self.check_win()  # Проверяем победу
+                        sending(self.droid.getPos())  # отправляем позицию дроида
 
-                else :
+                else:
+                    sending(
+                        f'Forward moving droid with DEVELOP mode! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     self.droid.setY(self.droid, -55 * dt)
                     self.crosshair.setY(self.crosshair, -55 * dt)
+                    sending(self.droid.getPos())  # отправляем позицию дроида
 
                 # движение врагов
                 for e in self.enemies:
+                    sending(f'Enemy moving {e}! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
                     bot(enemy=e, dt=dt)
 
                 # Сделаем специальное условие проверки убрано оружие или нет
                 if not self.hide_weapon:
-                    self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 3 # Позиция снайпера
-                    self.weapon.setPos(self.weapon_pos) # Обновляем позицию снайпера
+                    # sending(f'Update weapon position! {IP_USER}:{DEFAULT_PORT}') # отправляем сообщение на сервер
+                    self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 3  # Позиция снайпера
+                    self.weapon.setPos(self.weapon_pos)  # Обновляем позицию снайпера
                 else:
-                    self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 3 # Снова вычесляем позицию снайпера
-                    self.flash.setPos(self.weapon_pos) # ставим фонарик на место снайпера
+                    sending(f'Update flash position! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+                    self.weapon_pos = self.droid.getX(), self.droid.getY() + 0.7, 3  # Снова вычесляем позицию снайпера
+                    self.flash.setPos(self.weapon_pos)  # ставим фонарик на место снайпера
 
             if not self.another_camera:
-                camvec = self.droid.getPos() - self.camera.getPos() # вектор камеры
-                camvec.setZ(0) # 0 высота вектора
-                camdist = camvec.length() # дистанция камеры от дроида
-                camvec.normalize() # нормализируем вектор камеры
-                if camdist > 10.0: # если дистанция камеры больше 10, то смещаем камеру за дрооидом
+                camvec = self.droid.getPos() - self.camera.getPos()  # вектор камеры
+                camvec.setZ(0)  # 0 высота вектора
+                camdist = camvec.length()  # дистанция камеры от дроида
+                camvec.normalize()  # нормализируем вектор камеры
+                if camdist > 10.0:  # если дистанция камеры больше 10, то смещаем камеру за дрооидом
                     self.camera.setPos(self.camera.getPos() + camvec * (camdist - 10))
-                    camdist = 10.0 # теперь дистанция будет снова 10
-                if camdist < 5.0: # если дистагцтя камеры меньше 5, то...
-                    self.camera.setPos(self.camera.getPos() - camvec * (5 - camdist)) # сдвигаем камеру
-                    camdist = 5.0 # всё обновляем
-                    
-                self.camera.lookAt(self.floater) # вот и пригодился наш floater
+                    camdist = 10.0  # теперь дистанция будет снова 10
+                if camdist < 5.0:  # если дистагцтя камеры меньше 5, то...
+                    self.camera.setPos(self.camera.getPos() - camvec * (5 - camdist))  # сдвигаем камеру
+                    camdist = 5.0  # всё обновляем
+
+                self.camera.lookAt(self.floater)  # вот и пригодился наш floater
+
+            return task.cont  # возвращаем задачу
 
 
-            return task.cont # возвращаем задачу
-
-
-
-    for addon_class in addon_classes:
-        exec("addon_class().run()")
+    for addon_class in addon_classes:  # проходимся по всем аддонам
+        sending(f'Loading addons! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+        exec("addon_class().run()")  # выполняем их
 
     if __name__ == '__main__':
-        droid = DroidShooter() # Создадим экземпляр класса нашей игры
-        droid.run() # 3апустим игру
+        loop = asyncio.get_event_loop()  # поза :)
+        loop.run_until_complete(main())  # раним  задачи
 
-except:
-    message('''
-    [RU] Droid Game 3D упал! Вы можете увидеть
-    все ошибки в logs.txt. После того, как вы 
-    увидете ошибку(ошибки) просто отправьте нам 
-    текст ошибки. Вы попробуем что нибудь с 
-    этим сделать. 
-    [EN] Droid Game 3D is down! You can see
-    all errors in logs.txt. After you
-    you will see an error (errors) just send us
-    error text. Will you try something with
-    do it.''')
+
+except Exception as e:
+    import src.ipgetter as ipgetter  # импорт
+    from src.settings import *  # импорт
+
+    only_for_error()  # если ошибка
+    message(f'''
+            [EN] Droid Game {VERSION_}(running on {IP_USER_}:{DEFAULT_PORT_}) is down. 
+            Restart the game and try again. If the error persists -
+            go to the main menu of the game, and click "Bug?", in which describe the problem:
+                1. When did the error occur?
+                2. Your processor (number of threads, cores, frequency, model)
+                3. Your video card (model name, memory size)
+                4. Screenshot/video.
+
+            After that, wait for an answer. Good luck!
+
+
+            [RU] Droid Game {VERSION_}(работающий на {IP_USER_}:{DEFAULT_PORT_}) упал.
+            Перезапустите программу и попробуйте снова. Если ошибка повторится - 
+            зайдите в главное меню игры, и нажмите "Bug?", в котором опишите проблему:
+                1. Когда произошла ошибка?
+                2. Ваш процессор(кол-во потоков, ядер, частота, модель)
+                3. Ваша видеокарта(название модели, объем памяти)
+                4. Скриншот/видео.
+
+            После этого ждите ответа. Желаем удачи!
+
+            Error:
+                {e}
+            ''')  # выводим сообщение
+
