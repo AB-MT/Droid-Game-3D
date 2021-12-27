@@ -22,3 +22,4 @@ doom_font = './fonts/doom_font.ttf' # doom font шрифт
 ubunutumonobi = './fonts/UbuntuMono-BI.ttf' # UbunutuMono-BI шрифт
 iAWriterDuoSBold = './fonts/iAWriterDuoS-Bold.ttf' # да что вы от меня хотите? сами видите как переменная называется, значит такой шрифт
 VictorMonoBoldItalic = './fonts/VictorMono-BoldItalic.ttf' #  VictorMono-BoldItalic шрифт
+
