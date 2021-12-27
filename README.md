@@ -30,14 +30,8 @@ There are many different features in the game at the moment. You can study them 
 
 1.  Download the game<br>
 2.  Unpack the archive as you like<br>
-3.  Enter six commands for installing modules in the terminal:<br>
-<code>pip install panda3d</code><br>
-<code>pip install screeninfo</code><br>
-<code>pip install ipgetter2</code><br>
-<code>pip install PySimpleGUI</code><br>
-<code>pip install simplepbr</code><br>
-<code>pip install pyperclip</code><br>
-<code>pip install Cython</code><br>
+3.  Enter command:
+<br>pip install -r requirements.txt</br>
 4.  Open the directory with the game<br>
 5.  Find the main.py file<br>
 6.  Run it<br>
