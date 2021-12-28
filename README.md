@@ -6,77 +6,37 @@
 ![image](https://gitlab.com/polskiychel/droidgame3d/-/raw/main/logo.png)
 
 # Droid Game 3D
-This is a very interesting game in which you can fight droid bots and online with other players. Unite in teams, and arrange a capture of the flag.<br><br>
 
-# Some information about the game
+This is a fresh game that was developed using the **Panda3D** game engine and **Python** language in the **PyCharm** IDE (I don't know why you need this information).
+At the moment, the game has a fairly large audience and a large daily online (1000+ players are stable). In general, there seems to be nothing more remarkable here, it's time to start our journey..
 
-At the moment the game is on release 1.0, snapshot N3. 
+# Installation
+## Linux
+In the **Linux** operating system, everything is simple: first, install all the packages `pip install -r. / Requirements.txt`, write to the terminal `git clone https://github.com/WennMarcoRTX/droidgame3d.git`, then `cd droidgame3d`, we write if you have Cython, then `cython ./game.pyx`, and if just Python, then` python3 ./game.py`, if you have C, then `c ./game.c` (an assembly for Go, Ruby and C ++ will be released soon, wait;) ).
+## Windows
+For **Windows** we have a separate assembly with *.exe* and *.dll* files, which are always included when a new version is released, but if you want to play the game with the source code, then the installation is the same as y **Linux**, congratulations. 
 
-<h3>Popular servers</h3> <br><br>
 
-At the moment, the most popular are the admin server and DOOMPY.<br><br>
+# Management
+Here is the complete control for our game.
+## On the menu:
+In any menu of our game, wherever you are, from choosing a server to a chat, everywhere the **Esc** button closes this menu. If you are in the main menu - **Esc** closes it and the game ends.
+## In Game:
+*Note: jumps like **forward + left** are possible.*
 
-<h3>Server statistics</h3> <br><br>
+**Esc** - exit to the main menu.
+**Left arrow** - turn the droid to the left.
+**Right arrow** - turn the droid to the right.
+**Forward Arrow** - Moves the droid forward.
+**A** - shift of the camera focus relative to the droid to the left.
+**D** - shift the focus of the camera relative to the droid to the right.
+**Space** - shot.
+**S** - get the flashlight (if you already got it, the ** S ** button will turn it on and off).
+**W** - remove weapon.
+**P** - show the sight (if it is already shown - remove it).
+**G** - throw a grenade.
+**F** - start moving the ship.
+**0** - in case of fire. Extinguishes the fire.
+**F3** - only if single player, turns on polygon mode.
+**R** - turns RPG mode on and off.
 
-Admin fun server - 184 players per day.<br>
-DOOMPY - 47 players per day.<br>
-# Features
-✓Сapture the flag mode.<br>
-✘New bots<br>
-✘New droids.<br>
-# Gameplay
-<h3>Control</h3>
-There are many different features in the game at the moment. You can study them all as follows:<br><br>
-
-1.  Download the game<br>
-2.  Unpack the archive as you like<br>
-3.  Enter six commands for installing modules in the terminal:<br>
-<code>pip install panda3d</code><br>
-<code>pip install screeninfo</code><br>
-<code>pip install ipgetter2</code><br>
-<code>pip install PySimpleGUI</code><br>
-<code>pip install simplepbr</code><br>
-<code>pip install pyperclip</code><br>
-<code>pip install Cython</code><br>
-4.  Open the directory with the game<br>
-5.  Find the main.py file<br>
-6.  Run it<br>
-7.  In the menu, click on help.<br>
-Learn the controls and play!<br>
-
-# Some screenshots
-***Menu screenshots :***
-
-Main menu :
-![image](https://imgur.com/wcmLLc7.png)
-Moderators menu :
-![image](https://imgur.com/O1ZUTWr.png)
-Developers menu :
-![image](https://imgur.com/tCJVwdM.png)
-Top players menu :
-![image](https://imgur.com/JYbM2H5.png)
-Tutorial menu :
-![image](https://imgur.com/OkVvz4N.png)
-Connect server menu :
-![image](https://imgur.com/t8ksyv5.png)
-Chat menu :
-![image](https://imgur.com/YOgPWMT.png)
-Choose droid menu : 
-![image](https://imgur.com/JZFhjsC.png)
-<h3>In game screenshot</h3>
-
-![image](https://imgur.com/Hy2gQenl.png)
-
-That's screenshot made in online mode. 
-This screenshot does not show everything you can do in the game. (Server: DOOMPY)
-
-# Thanks
-Special thanks to <a href="https://discourse.panda3d.org/u/panda3dmastercoder"> panda3dmastercoder </a>.
-He was the first to help me with development and created this repository.
-Thank you <a href="https://discourse.panda3d.org/u/wezu"> wezu </a> for the wonderful DirectGUIDesigner program.
-I used it to create a menu.
-Thanks also <a href="https://discourse.panda3d.org/u/et1337"> et1337 </a> (<a href="https://github.com/etodd"> ettod </a>) for games a3p.
-From there I took the planet model and menu system. Unfortunately, at the moment a3p is going through a difficult time. You can [support](https://github.com/etodd/a3p) this project. Never mind that the last commit was in 2012. Yes, this is a very old game, but you can still play it by downloading it from the [official game site](http://a3p.sf.net/)
-
-# Another sites
-<iframe src="https://itch.io/embed/1188941?bg_color=070707&amp;fg_color=327345&amp;link_color=327345&amp;border_color=fb922b" frameborder="0" width="552" height="167"><a href="https://ma3rx.itch.io/droid-game-3d">Droid Game 3D by MA3RX</a></iframe>
