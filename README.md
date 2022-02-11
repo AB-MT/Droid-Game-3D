@@ -24,35 +24,10 @@ In any menu of our game, wherever you are, from choosing a server to a chat, eve
 ## In Game:
 *Note: jumps like **forward + left** are possible.*
 
-**Esc** - exit to the main menu.
 
-**Left arrow** - turn the droid to the left.
-
-**Right arrow** - turn the droid to the right.
-
-**Forward Arrow** - Moves the droid forward.
-
-**A** - shift of the camera focus relative to the droid to the left.
-
-**D** - shift the focus of the camera relative to the droid to the right.
-
-**Space** - shot.
-
-**S** - get the flashlight (if you already got it, the ** S ** button will turn it on and off).
-
-**W** - remove weapon.
-
-**P** - show the sight (if it is already shown - remove it).
-
-**G** - throw a grenade.
-
-**F** - start moving the ship.
-
-**0** - in case of fire. Extinguishes the fire.
-
-**F3** - only if single player, turns on polygon mode.
-
-**R** - turns RPG mode on and off.
+| ***Button*** | Esc | Left arrow | Right arrow | Forward Arrow | A | D | Space | S | W | P | G | F | 0 | F3 | R |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | 
+| ***About*** | Exit | Turn the droid to the left. | Turn the droid to the right. | Moves the droid forward. | Shift of the camera focus relative to the droid to the left. | Shift the focus of the camera relative to the droid to the right. | Shot. | Get the flashlight (if you already got it, the **S** button will turn it on and off). | Remove weapon. | show the sight (if it is already shown - remove it). | Throw a grenade. | Start moving the ship. | Iin case of fire. Extinguishes the fire. | Only if single player, turns on polygon mode. | Turns RPG mode on and off. |
 
 # Optimization
 Our game has already been rewritten in **C** and **Cython**. We are now rewriting it to **Go** and **Ruby**.
