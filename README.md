@@ -24,6 +24,10 @@ In any menu of our game, wherever you are, from choosing a server to a chat, eve
 ## In Game:
 *Note: jumps like **forward + left** are possible.*
 
+| ***Command*** | Esc | Left arrow | Right arrow | Forward Arrow | A | D | Space | S | W | P | G | F | 0 | F3 | R |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ***About*** | Exit | Turn the droid to the left. | Turn the droid to the right. | Moves the droid forward. | Shift of the camera focus relative to the droid to the left. | Shift the focus of the camera relative to the droid to the right. | Shot. | Get the flashlight (if you already got it, the **S** button will turn it on and off). | Remove weapon. | Show the sight (if it is already shown - remove it). | Throw a grenade. | Start moving the ship. | In case of fire. Extinguishes the fire. | Only if single player, turns on polygon mode. | Turns RPG mode on and off. |
+
 
 # Optimization
 Our game has already been rewritten in **C** and **Cython**. We are now rewriting it to **Go** and **Ruby**.
