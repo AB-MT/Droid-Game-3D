@@ -70,14 +70,15 @@ try:
     from src.GUI.moderators import *  # модераторы ГУИ
     from src.GUI.choose_site import *  # выбор сервера ГУИ
     from src.GUI.profile import *  # профиль ГУИ
-    from src.GUI.privilege import *
+    from src.GUI.privilege import * # привилегии ГУИ
+    from src.sys.servers_sys import *
     import src.audio as audio  # аудио
     import src.pbp as pbp  # pbr система
     import src.ipgetter as ipgetter  # получатель айпи
     import random  # рандом
     import sys  # система
-    import time  #время
-    from datetime import datetime  # время2
+    import time  # время
+    from datetime import datetime  # время - 2
     import os  # модуль для терминальных команд
     import math  # математика....ААААААААААААААААААААААА!!
     from screeninfo import get_monitors  # модуль для получения информации об экране
@@ -91,15 +92,11 @@ try:
 
     config = json.load(open("./RES/addon_config.json"))  # загружаем конфиг аддона
     addon_classes = []  # классы аддонов
-    for addon in config:  # читаем конфиг
-        if not config[addon]["disabled"]:  # если аддон не отключен - ЧИТАЕМ!
-            exec("from addons." + addon + ".main  import *")  # выполняем аддон
-            addon_classes.append(config[addon]["main_class"])  # добавляем в класс аддонов
 
     message(message=f'Welcome to Droid Game {VERSION}')  # сообщение
     # подключение к серверу
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # создаем обьект портала для подключения
-    s.connect((site(sites[0]), DEFAULT_PORT))  # подключаемся к серверу
+    s.connect((sites[0], DEFAULT_PORT))  # подключаемся к серверу
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # делаем коннект к серверу многоразовый
     s.send(
         f'Connected by Droid Game {VERSION} and IP {IP_USER}:{DEFAULT_PORT}'.encode())  # посылаем на сервер сообщение
@@ -172,10 +169,12 @@ try:
         while True:
             link = server_updates  # ссылка
             f = requests.get(link)  # получаем текст
-            if f:  # текст будет либо True либо False
-                await message('''
-                        UPDATE! Added: {}
-                                Number update: {}
+            if True:  # текст будет либо True либо False
+                update = 'it"s not work, sorry('
+                vers  = '4/6'
+                await message(f'''
+                        UPDATE! Added: {update}
+                                Number update: {vers}
 
                                     Thanks for playing :)
                         ''')  # сообщение об обновлении
@@ -384,8 +383,9 @@ try:
             base.enableParticles()  # инициализируем эффект дыма
             self.disableMouse()  # Отключаем перемещение через мышку
 
-            self.win.setClearColor((0.5, 0.5, 0.8,
-                                    1))  # Закрашиваем поверхность чёрным. Дело в том, что по умолчанию в этом игровом движке поверхность закрашивается серым.
+            self.win.setClearColor((0.2, 0.3
+                                    , 0.6,
+                                    1))  # Закрашиваем поверхность голубым. Дело в том, что по умолчанию в этом игровом движке поверхность закрашивается серым.
             self.font = loader.loadFont('./fonts/doom_font.ttf')  # загрузим шрифт из игры doom
             self.inst_font = loader.loadFont('./fonts/arial.ttf')  # загрузим шрифт arial
 
@@ -417,11 +417,12 @@ try:
                 self.globe.reparentTo(render)  # инициализируем модель
                 self.globe.setTransparency(TransparencyAttrib.MAlpha)  # прозрачность
                 self.globe.setColor(Vec4(1, 1, 1, 0.6))  # цвет
+                self.globe.setScale((1.5, 1.5, 1.5))
                 self.globe.setTwoSided(True)  # двойная модель
                 self.globe.setRenderModeWireframe()  # полигольный режим
 
                 # Врашение планеты
-                self.globe.hprInterval(200, (360, 360, 0)).loop()
+                self.globe.hprInterval(300, (360, 360, 0)).loop()
 
                 self.camera.setPos(0, -self.camera_distation, 0)  # камера
 
@@ -431,48 +432,35 @@ try:
                 hpr=LVecBase3f(0, 0, 0),
                 pos=LPoint3f(-0.675, 0, 0.15),
                 scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Login',
+                text='Войти',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=rootParent,
                 command=self.load_game,
                 pressEffect=1,
             )
             self.pg3083.setTransparency(0)
-
-            self.pg7785 = DirectLabel(
-                frameSize=(-3.15, 3.25, -0.113, 0.725),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(2.9, 0, 3.025),
-                scale=LVecBase3f(1, 1, 1),
-                text='Droid Game',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pg3083,
-            )
-            self.pg7785.setTransparency(0)
-
+    
+            
             self.pg8620 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-2.95, 0, -4.2),
-                scale=LVecBase3f(1, 1, 1),
-                text='Quit',
+                pos=LPoint3f(-0.675, 0, 0.03),
+                scale=LVecBase3f(.1, .1, .1),
+                text='Выход',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
-                parent=self.pg7785,
+                text_font=self.font,
+                parent=rootParent,
                 command=self.easy_exit,
                 pressEffect=1,
             )
@@ -481,15 +469,16 @@ try:
             self.pg19052 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(10.075, 0, 2.425),
+                pos=LPoint3f(18.76, 0, 4.90),
                 scale=LVecBase3f(1, 1, 1),
-                text='PRO',
+                text='ИвУД',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg8620,
                 command=self.pro_system,
                 pressEffect=1,
@@ -534,7 +523,7 @@ try:
             self.pg29670 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0.625, 0, -0.45),
+                pos=LPoint3f(1.5, 0, -0.45),
                 scale=LVecBase3f(0.1, 0.1, 0.1),
                 text='EN',
                 text_align=TextNode.A_center,
@@ -543,6 +532,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg28909,
                 pressEffect=1,
                 command=self.en_lang,
@@ -552,265 +542,531 @@ try:
             self.pg30019 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0.05, 0, -2.55),
-                scale=LVecBase3f(1, 1, 1),
-                text='GB',
+                pos=LPoint3f(1.5, 0, -0.57),
+                scale=LVecBase3f(.1, .1, .1),
+                text='ЧБ',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
-                parent=self.pg29670,
+                text_font=self.font,
+                parent=self.pg28909,
                 command=self.gb_mode,
                 pressEffect=1,
             )
             self.pg30019.setTransparency(0)
 
-            self.pgServers = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(1.3, 0, -0.575),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Servers',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-                command=self.choose_server,
-                pressEffect=1,
-            )
-
-            self.pg149 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(1.3, 0, -0.675),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Chat',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-                command=self.open_chat,
-                pressEffect=1,
-            )
-            self.pg149.setTransparency(0)
-
-            self.pg438 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, -1.15),
-                scale=LVecBase3f(1, 1, 1),
-                text='Droid',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pg149,
-                command=self.select_droid,
-                pressEffect=1,
-            )
-            self.pg438.setTransparency(0)
+            
             self.pgSingle = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, -1.15),
-                scale=LVecBase3f(1, 1, 1),
-                text='Single',
+                pos=LPoint3f(0, 0, -0.55),
+                scale=LVecBase3f(0.2, 0.3, 0.2),
+                text='Навигатор',
                 text_align=TextNode.A_center,
-                text_scale=(1, 1),
+                text_scale=(0.7, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
-                parent=self.pg438,
-                command=self.single_player,
+                text_font=self.font,
+                parent=rootParent,
+                command=self.open_navigator,
                 pressEffect=1,
             )
-            self.pg438.setTransparency(0)
-
-            self.pg326 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 4.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Help',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.direction_show,
-            )
-            self.pg326.setTransparency(0)
-
-            self.pgTutorial = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 5.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Tutorial',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.choose_level,
-            )
-            self.pg326.setTransparency(0)
-
-            self.pgTop = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 6.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Top',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_top_gui,
-            )
-            self.pgTop.setTransparency(0)
-
-            self.pgDevelopers = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 7.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Developers',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_developers_gui,
-            )
-            self.pgTop.setTransparency(0)
-
-            self.pgModerators = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 8.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Moderators',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_moderators_gui,
-            )
-            self.pgTop.setTransparency(0)
-
-            self.pgProfile = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 9.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Profile',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_profile_gui,
-            )
-            self.pgProfile.setTransparency(0)
-
-            self.pgProfile = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 9.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Profile',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_profile_gui,
-            )
-            self.pgProfile.setTransparency(0)
-
-            self.pgPrivilege = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, 10.500),
-                scale=LVecBase3f(1, 1, 1),
-                text='Privilege',
-                text_align=TextNode.A_center,
-                text_scale=(0.5, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pgSingle,
-                pressEffect=1,
-                command=self.open_prvilege_gui,
-            )
-            self.pgPrivilege.setTransparency(0)
 
             self.pg452 = DirectButton(
                 frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
                 hpr=LVecBase3f(0.111, 11, 1111),
-                pos=LPoint3f(0.725, 0, 0.65),
+                pos=LPoint3f(1, 0, 0.75),
                 scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Bug?',
+                text='Баг?',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.inst_font,
                 parent=rootParent,
-                pressEffect=1,
+                pressEffect=0,
                 command=self.bug_message,
             )
             self.pg452.setTransparency(0)
 
             self.accept("escape", sys.exit)  # При нажатии клавиши Esc выходим.
 
+        def open_navigator(self, rootParent=None):
+            # Удаляем элементы меню
+            self.pg3083.destroy()
+            self.pg27986.destroy()
+            self.pg28909.destroy()
+            self.pg452.destroy()
+            self.pg8620.destroy()
+            self.pgSingle.destroy()
+            self.pg19052.destroy()
+
+            self.pg15848 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.475, 0, 0.2),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Привелегии',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg15848.setTransparency(0)
+
+            self.pg22036 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.075, 0, 0.2),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Профиль',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg22036.setTransparency(0)
+
+            self.pg30387 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0.3, 0, 0.2),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Модераторы',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg30387.setTransparency(0)
+
+            self.pg53984 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.5, 0, 0.05),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Разработчики',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg53984.setTransparency(0)
+
+            self.pg59389 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.075, 0, 0.05),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Топ',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg59389.setTransparency(0)
+
+            self.pg75802 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0.3, 0, 0.05),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Обучение',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg75802.setTransparency(0)
+
+            self.pg90465 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.5, 0, -0.075),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Помощь',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg90465.setTransparency(0)
+
+            self.pg95706 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.075, 0, -0.075),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Сервера',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg95706.setTransparency(0)
+
+            self.pg106133 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(0.3, 0, -0.075),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Чат',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg106133.setTransparency(0)
+
+            self.pg111647 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.5, 0, -0.2),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Смена дроида',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg111647.setTransparency(0)
+
+            self.pg121566 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.075, 0, -0.2),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Одиночный',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.5, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.6, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.6, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.font,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg121566.setTransparency(0)
+
+            self.pg128050 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.875, 0, 0.675),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='<- Назад',
+                text0_align=TextNode.A_center,
+                text0_scale=(0.6, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(0.7, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(0.7, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(0.6, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                text_font=self.inst_font,
+                command=self.navigator_destroy,
+                parent=rootParent,
+                pressEffect=1,
+            )
+            self.pg128050.setTransparency(0)
+
+            self.accept("escape", sys.exit)  # При нажатии клавиши Esc выходим.
+
+        def navigator_destroy(self):
+            # Удаляем элементы навигатора
+            self.pg15848.destroy()
+            self.pg22036.destroy()
+            self.pg30387.destroy()
+            self.pg53984.destroy()
+            self.pg59389.destroy()
+            self.pg75802.destroy()
+            self.pg90465.destroy()
+            self.pg95706.destroy()
+            self.pg106133.destroy()
+            self.pg111647.destroy()
+            self.pg121566.destroy()
+            self.pg128050.destroy()
+
+            self.menu(False)
+
         def open_top_gui(self):
             # Удаляем элементы меню
             self.pg3083.destroy()
             self.pg27986.destroy()
             self.pg28909.destroy()
-            self.pg149.destroy()
             self.pg452.destroy()
-            self.pg326.destroy()
             self.pgSingle.destroy()
-            self.pgServers.destroy()
 
             self.top_players_gui = GUI(USERNAME)  # загружаем интерфейс который прописан в файле
 
@@ -1160,33 +1416,14 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=rootParent,
                 pressEffect=1,
                 command=self.exit_menu2
             )
             self.pg4741.setTransparency(0)
 
-            self.pg1254 = OkDialog(
-                frameSize=(-0.22899998878128827, 0.22899998878128827, -0.3417499961704016, 0.19224999830126763),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-0.075, 0.1, 0.025),
-                state='normal',
-                text='Default basic droid',
-                Button0_text_align=TextNode.A_center,
-                Button0_text_scale=(0.06, 0.06),
-                Button0_text_pos=(0, 0),
-                Button0_text_fg=LVecBase4f(0, 0, 0, 1),
-                Button0_text_bg=LVecBase4f(0, 0, 0, 0),
-                Button0_text_wordwrap=None,
-                text_align=TextNode.A_left,
-                text_scale=(0.05, 0.06),
-                text_pos=(-0.21, -0.013),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-            )
-            self.pg1254.setTransparency(0)
+
 
         def update_chat(self):
             # читаем все сообщения, показывая их
@@ -1222,6 +1459,7 @@ try:
                     text3_fg=LVecBase4f(0, 0, 0, 1),
                     text3_bg=LVecBase4f(0, 0, 0, 0),
                     text3_wordwrap=None,
+                    text0_font=self.font,
                     parent=self.pg4898,
                     command=base.messenger.send,
                     extraArgs=['select_list_item_changed'],
@@ -1311,6 +1549,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 command=self.send_message,
                 parent=rootParent,
             )
@@ -1322,6 +1561,7 @@ try:
                 hpr=LVecBase3f(0, 0, 0),
                 pos=LPoint3f(-0.2, 0, -0.05),
                 scale=LVecBase3f(1, 0.7, 0.7),
+                text_font=self.font,
                 parent=rootParent,
                 entry=self.pg10418,
             )
@@ -1345,6 +1585,7 @@ try:
                         text0_fg=LVecBase4f(0, 0, 0, 1),
                         text0_bg=LVecBase4f(0, 0, 0, 0),
                         text0_wordwrap=None,
+                        text0_font=self.inst_font,
                         parent=self.pg1384,
                     ).setTransparency(0)
 
@@ -1408,6 +1649,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.inst_font,
                 parent=rootParent,
             )
             self.pg471.setTransparency(0)
@@ -1424,6 +1666,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -1442,6 +1685,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -1460,6 +1704,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -1478,6 +1723,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -1497,6 +1743,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -1506,7 +1753,7 @@ try:
             self.pg2484 = DirectEntry(
                 frameSize=(-0.1, 10.1, -0.3962500154972076, 1.087500011920929),
                 hpr=LVecBase3f(0, 0, 0),
-                initialText='',
+                initialText='Порт сервера',
                 pos=LPoint3f(-13.4, 0, -3.225),
                 scale=LVecBase3f(1.5, 1.5, 1),
                 text_align=TextNode.A_left,
@@ -1515,6 +1762,7 @@ try:
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg914,
             )
             self.pg2484.setTransparency(0)
@@ -1524,13 +1772,14 @@ try:
                 hpr=LVecBase3f(0, 0, 0),
                 pos=LPoint3f(7.825, 0, -1.25),
                 scale=LVecBase3f(1, 1, 1),
-                text='Connect',
+                text='Подключится',
                 text_align=TextNode.A_center,
-                text_scale=(1, 1),
+                text_scale=(0.7, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.font,
                 parent=self.pg2484,
                 command=self.exit_menu3,
                 pressEffect=1,
@@ -1541,13 +1790,14 @@ try:
                 hpr=LVecBase3f(0, 0, 0),
                 pos=LPoint3f(0, 0, 0),
                 scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='scrolled list item',
+                text='Empty',
                 text_align=TextNode.A_center,
                 text_scale=(1, 1),
                 text_pos=(0, 0),
                 text_fg=LVecBase4f(0, 0, 0, 1),
                 text_bg=LVecBase4f(0, 0, 0, 0),
                 text_wordwrap=None,
+                text_font=self.inst_font,
                 parent=self.pg471,
                 command=base.messenger.send,
                 extraArgs=['select_list_item_changed'],
@@ -2549,7 +2799,9 @@ try:
             return task.cont  # возвращаем задачу
 
         # прочие важные функции движка
-
+        def important_func(self):
+            '''тут будет какая-то важная функция'''
+            pass
 
     for addon_class in addon_classes:  # проходимся по всем аддонам
         sending(f'Loading addons! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
@@ -2573,10 +2825,7 @@ except Exception as e:
                 2. Your processor (number of threads, cores, frequency, model)
                 3. Your video card (model name, memory size)
                 4. Screenshot/video.
-
             After that, wait for an answer. Good luck!
-
-
             [RU] Droid Game {VERSION_}(работающий на {IP_USER_}:{DEFAULT_PORT_}) упал.
             Перезапустите программу и попробуйте снова. Если ошибка повторится - 
             зайдите в главное меню игры, и нажмите "Bug?", в котором опишите проблему:
@@ -2584,9 +2833,7 @@ except Exception as e:
                 2. Ваш процессор(кол-во потоков, ядер, частота, модель)
                 3. Ваша видеокарта(название модели, объем памяти)
                 4. Скриншот/видео.
-
             После этого ждите ответа. Желаем удачи!
-
             Error:
                 {e}
             ''')  # выводим сообщение
