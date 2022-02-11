@@ -34,6 +34,6 @@ Our game has already been rewritten in **C** and **Cython**. We are now rewritin
 However, for all versions we use additional optimization:
 
 
-- [ x ] AsyncIO.
+- [x] AsyncIO.
 - [ ] Support for CUDA (work of all code on the GPU).
 
