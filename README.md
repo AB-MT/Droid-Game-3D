@@ -33,9 +33,7 @@ In any menu of our game, wherever you are, from choosing a server to a chat, eve
 Our game has already been rewritten in **C** and **Cython**. We are now rewriting it to **Go** and **Ruby**.
 However, for all versions we use additional optimization:
 
-1. Using JIT compilers **Numba** and **Pyjion**.
-2. Multithreading.
-3. Multiprocessing (separate processes that transfer information through your RAM).
-4. AsyncIO.
-5. Support for CUDA (work of all code on the GPU).
+
+1. AsyncIO.
+2. Support for CUDA (work of all code on the GPU).
 
