@@ -825,6 +825,8 @@ if True:
             self.pg6685.destroy()
             self.pg872.destroy()
 
+            self.menu(False)
+
         def open_settings_gui(self, rootParent=None):
             self.navigator_gui_destroy() # удаляем элементы навигации
 
