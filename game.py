@@ -25,8 +25,7 @@ def only_for_error():
     DEFAULT_PORT_ = 9099  # порт
     VERSION_ = VERSION  # версия
 
-
-if True:
+try:
     from panda3d.core import *
 
     # встроенные в графических движка элементы
@@ -820,6 +819,8 @@ if True:
             self.pg5474.destroy()
             self.pg6685.destroy()
             self.pg872.destroy()
+
+            self.menu(False)
 
         def open_settings_gui(self, rootParent=None):
             self.navigator_gui_destroy() # удаляем элементы навигации
