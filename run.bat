@@ -1,2 +1,2 @@
-python3 ./main.py # Enjoy to play:)
+python3 ./game.py # Enjoy to play:)
 
