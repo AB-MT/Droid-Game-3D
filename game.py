@@ -25,7 +25,12 @@ def only_for_error():
     DEFAULT_PORT_ = 9099  # порт
     VERSION_ = VERSION  # версия
 
+
 try:
+    # главная часть всей игры - Cython.
+    import pyximport # импоритурем Cython
+    pyximport.install() # инициализируем его
+
     from panda3d.core import *
 
     # встроенные в графических движка элементы
@@ -215,8 +220,9 @@ try:
     async def main():
         taskA = loop.create_task(start())  # основная игра
         taskB = loop.create_task(listening_updates(sites[0]))  # Проверяем обновления
-        # taskC = loop.create_task(check_receive())  # проверка полученых сообщений
-        await asyncio.wait([taskA, taskB])  # запуск задач
+        taskC = loop.create_task(check_receive())  # проверка полученых сообщений
+
+        await asyncio.wait([taskA, taskB, taskC])  # запуск задач
 
 
     # режим захвата флага
@@ -2702,8 +2708,33 @@ try:
         sending(f'Loading addons! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
         exec("addon_class().run()")  # выполняем их
 
-#if __name__ == '__main__':
-loop = asyncio.get_event_loop()  # поза :)
-loop.run_until_complete(start())  # раним  задачи
+    if __name__ == '__main__':
+        loop = asyncio.get_event_loop()  # поза :)
+        loop.run_until_complete(start())  # раним  задачи
 
+except Exception as e:
+    import src.ipgetter as ipgetter  # импорт получателя айпи
+    from src.settings import *  # импорт настроек
+
+    only_for_error()  # если ошибка
+    message(f'''
+            [EN] Droid Game {VERSION_}(running on {IP_USER_}:{DEFAULT_PORT_}) is down. 
+            Restart the game and try again. If the error persists -
+            go to the main menu of the game, and click "Bug?", in which describe the problem:
+                1. When did the error occur?
+                2. Your processor (number of threads, cores, frequency, model)
+                3. Your video card (model name, memory size)
+                4. Screenshot/video.
+            After that, wait for an answer. Good luck!
+            [RU] Droid Game {VERSION_}(работающий на {IP_USER_}:{DEFAULT_PORT_}) упал.
+            Перезапустите программу и попробуйте снова. Если ошибка повторится - 
+            зайдите в главное меню игры, и нажмите "Bug?", в котором опишите проблему:
+                1. Когда произошла ошибка?
+                2. Ваш процессор(кол-во потоков, ядер, частота, модель)
+                3. Ваша видеокарта(название модели, объем памяти)
+                4. Скриншот/видео.
+            После этого ждите ответа. Желаем удачи!
+            Error:
+                {e}
+            ''')  # выводим сообщение
 
