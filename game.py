@@ -27,7 +27,7 @@ def only_for_error():
 
 
 try:
-    from panda3d.core import *
+    from panda3d.core import * # ядро игрового движка
 
     # встроенные в графических движка элементы
     from direct.gui import DirectGuiGlobals as DGG  # глобалы
@@ -49,6 +49,8 @@ try:
     from direct.gui.DirectSlider import DirectSlider  # слайдер
     from direct.gui.DirectCheckBox import DirectCheckBox  # галочка
     from direct.gui.DirectCheckButton import DirectCheckButton  # галочка с текстом
+    from src.marconit_engine import *
+    from src.bot import *
 
     from direct.distributed.PyDatagram import \
         PyDatagram  # PyDatagram - простой встроенный модуль в движок для создания онлайна
@@ -123,16 +125,6 @@ try:
     USERNAME = load_profile('./profile/username.txt') + str(random.randrange(0, 10000))  # загружаем имя пользователя
     RATING = int(load_profile('./profile/rating.txt'))  # загружаем рейтинг пользователя
     STATUS = load_profile('./profile/status.txt')  # загружаем статус пользователя
-
-
-    # старт клиента
-    def start_client():
-        worldClient = Client(9099, ipgetter.myip())  # подключение к миру и получение айпи
-        N = PlayerReg()  # регистрация игрока в мире
-        keys = Keys()  # клавиши
-        w = World()  # мир
-        chatReg = chatRegulator(worldClient, keys)  # рега чата
-
 
     def receiveTextViaSocket(sock):
         '''Получает сообщение с сервера'''
@@ -413,138 +405,144 @@ try:
                 self.camera.setPos(0, -self.camera_distation, 0)  # камера
 
             # P. S. Это меню я не писал. Оно сделано на DirectGUIDesigner
-            self.pg3083 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+            self.pg872 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-0.675, 0, 0.15),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Войти',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                text_font=self.font,
+                pos=LPoint3f(-0.1, 0, 0.1),
+                scale=LVecBase3f(0.2, 0.2, 0.2),
+                text='Вход',
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(1, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(1, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(1, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
                 parent=rootParent,
+                pressEffect=1,
                 command=self.load_game,
-                pressEffect=1,
+                text_font=self.ubunutu_inst_font,
             )
-            self.pg3083.setTransparency(0)
-    
-            
-            self.pg8620 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-0.675, 0, 0.03),
-                scale=LVecBase3f(.1, .1, .1),
-                text='Выход',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                text_font=self.font,
-                parent=rootParent,
-                command=self.easy_exit,
-                pressEffect=1,
-            )
-            self.pg8620.setTransparency(0)
+            self.pg872.setTransparency(0)
 
-            self.pg19052 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+            self.pg3035 = DirectSlider(
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(18.76, 0, 4.90),
-                scale=LVecBase3f(1, 1, 1),
-                text='ИвУД',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                text_font=self.font,
-                parent=self.pg8620,
-                command=self.pro_system,
-                pressEffect=1,
-            )
-            self.pg19052.setTransparency(0)
-
-            self.pg27986 = DirectEntry(
-                frameSize=(-0.1, 10.1, -0.3962500154972076, 1.087500011920929),
-                hpr=LVecBase3f(0, 0, 0),
-                initialText=self.username,
-                pos=LPoint3f(-0.825, 0, -0.125),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text_align=TextNode.A_left,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-            )
-            self.pg27986.setTransparency(0)
-
-            self.pg28909 = DirectSlider(
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-0.3, 0, 0.85),
-                text='Lifes Machine',
-                value=0,
-                text_align=TextNode.A_center,
-                text_scale=(0.1, 0.1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
+                pos=LPoint3f(-0.025, 0, 0.7),
+                text='Кол-во начальных жизней',
+                value=1.0,
+                text0_align=TextNode.A_center,
+                text0_scale=(0.1, 0.1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
                 thumb_frameSize=(-0.05, 0.05, -0.08, 0.08),
                 thumb_hpr=LVecBase3f(0, 0, 0),
-                thumb_pos=LPoint3f(-0.949068, 0, 0),
+                thumb_pos=LPoint3f(0.95, 0, 0),
                 parent=rootParent,
-                command=self.set_lifes
+                command=self.set_lifes,
+                text_font=self.ia_inst_font,
             )
-            self.pg28909.setTransparency(0)
+            self.pg3035.setTransparency(0)
 
-            
-            self.pgSingle = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
+            self.pg5771 = DirectButton(
+                frameSize=(-2.525, 2.65, -0.213, 0.825),
                 hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(0, 0, -0.55),
-                scale=LVecBase3f(0.2, 0.3, 0.2),
+                pos=LPoint3f(-0.1, 0, -0.125),
+                scale=LVecBase3f(0.2, 0.2, 0.2),
                 text='Навигатор',
-                text_align=TextNode.A_center,
-                text_scale=(0.7, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                text_font=self.font,
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(1, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(1, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(1, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
                 parent=rootParent,
                 command=self.open_navigator,
                 pressEffect=1,
+                text_font= self.ubunutu_inst_font,
             )
+            self.pg5771.setTransparency(0)
 
-            self.pg452 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0.111, 11, 1111),
-                pos=LPoint3f(1, 0, 0.75),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Баг?',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                text_font=self.inst_font,
+            self.pg7243 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.05, 0, -0.35),
+                scale=LVecBase3f(0.2, 0.2, 0.2),
+                text='Выйти',
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(1, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(1, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(1, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
                 parent=rootParent,
-                pressEffect=0,
-                command=self.bug_message,
+                command=self.exit,
+                pressEffect=1,
+                text_font=self.ubunutu_inst_font,
             )
-            self.pg452.setTransparency(0)
+            self.pg7243.setTransparency(0)
 
             self.accept("escape", sys.exit)  # При нажатии клавиши Esc выходим.
+
+        def destroy_menu(self):
+            self.pg872.destroy()
+            self.pg3035.destroy()
+            self.pg5771.destroy()
+            self.pg7243.destroy()
 
         def navigator_gui_destroy(self):
             self.pg10440.destroy()
@@ -557,13 +555,7 @@ try:
 
         def open_navigator(self, rootParent=None):
             # Удаляем элементы меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg452.destroy()
-            self.pg8620.destroy()
-            self.pgSingle.destroy()
-            self.pg19052.destroy()
+            self.destroy_menu()
 
             self.pg10440 = DirectLabel(
                 frameSize=(-2.65, 2.65, -0.113, 0.725),
@@ -821,6 +813,7 @@ try:
             self.pg5474.destroy()
             self.pg6685.destroy()
             self.pg872.destroy()
+            self.pg1966.destroy()
 
             self.menu(False)
 
@@ -946,6 +939,57 @@ try:
             )
             self.pg6685.setTransparency(0)
 
+            self.pg1966 = DirectCheckButton(
+                frameSize=(-3.775, 10.025, -0.312, 0.913),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.275, 0, -0.125),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='ПУ',
+                indicator_hpr=LVecBase3f(0, 0, 0),
+                indicator_pos=LPoint3f(-3.4, 0, 0.000500018),
+                indicator_relief='sunken',
+                indicator_text0_align=TextNode.A_center,
+                indicator_text0_scale=(1, 1),
+                indicator_text0_pos=(0, -0.2),
+                indicator_text0_fg=LVecBase4f(0, 0, 0, 1),
+                indicator_text0_bg=LVecBase4f(0, 0, 0, 0),
+                indicator_text0_wordwrap=None,
+                indicator_text1_align=TextNode.A_center,
+                indicator_text1_scale=(1, 1),
+                indicator_text1_pos=(0, -0.2),
+                indicator_text1_fg=LVecBase4f(0, 0, 0, 1),
+                indicator_text1_bg=LVecBase4f(0, 0, 0, 0),
+                indicator_text1_wordwrap=None,
+                text0_align=TextNode.A_left,
+                text0_scale=(1, 1),
+                text0_pos=(-2.0, 0.0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_left,
+                text1_scale=(1, 1),
+                text1_pos=(-2.0, 0.0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_left,
+                text2_scale=(1, 1),
+                text2_pos=(-2.0, 0.0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_left,
+                text3_scale=(1, 1),
+                text3_pos=(-2.0, 0.0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                parent=rootParent,
+                command=self.pro_system,
+                text_font=self.ia_inst_font,
+            )
+            self.pg1966.setTransparency(0)
+
             self.pg872 = DirectButton(
                 frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
                 hpr=LVecBase3f(0, 0, 0),
@@ -987,11 +1031,7 @@ try:
 
         def open_top_gui(self):
             # Удаляем элементы меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg452.destroy()
-            self.pgSingle.destroy()
+            self.destroy_menu()
 
             self.top_players_gui = GUI(USERNAME)  # загружаем интерфейс который прописан в файле
 
@@ -1072,15 +1112,8 @@ try:
             # сделаем одиночную игру.
             self.single = True
 
-            # удаляем элемиенты меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg149.destroy()
-            self.pg452.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
+            # Удаляем элементы меню
+            self.destroy_menu()
 
             self.pg149 = DirectLabel(
                 frameSize=(-3.15, 3.25, -0.113, 0.725),
@@ -1179,72 +1212,14 @@ try:
             self.pg149.hide()
             self.menu(False)  # включим menu
 
-        def bug_message(self, rootParent=None):
-            # сообщение о баге
-
-            # удаляем элемиенты меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg149.destroy()
-            self.pg452.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
-
-            self.click_sound.play()  # играем звук клика
-            self.command_sound.play()  # играем звук команды
-
-            # рисуем интерфейс
-            self.pg149 = DirectButton(
-                frameSize=(-1.5249999523162843, 1.6499999523162843, -0.21250001192092896, 0.8250000238418579),
-                hpr=LVecBase3f(0, 0, 0),
-                pos=LPoint3f(-0.6, 0, 0.175),
-                scale=LVecBase3f(0.1, 0.1, 0.1),
-                text='Send',
-                text_align=TextNode.A_center,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=rootParent,
-                pressEffect=1,
-                command=self.exit_menu4
-            )
-            self.pg149.setTransparency(0)
-
-            self.pg438 = DirectEntry(
-                frameSize=(-0.1, 10.1, -0.3962500154972076, 1.087500011920929),
-                hpr=LVecBase3f(0, 0, 0),
-                initialText='',
-                pos=LPoint3f(-1.415, 0, -1.425),
-                scale=LVecBase3f(1.5, 1, 1),
-                text_align=TextNode.A_left,
-                text_scale=(1, 1),
-                text_pos=(0, 0),
-                text_fg=LVecBase4f(0, 0, 0, 1),
-                text_bg=LVecBase4f(0, 0, 0, 0),
-                text_wordwrap=None,
-                parent=self.pg149,
-            )
-            self.pg438.setTransparency(0)
-
         def select_droid(self, rootParent=None):
             # Выбор дроида
 
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()  # играем звук команды
 
-            # удаляем элемиенты меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg149.destroy()
-            self.pg452.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
+            # Удаляем элементы меню
+            self.destroy_menu()
 
             # Рисуем интерфейс
             self.pg188 = DirectButton(
@@ -1385,15 +1360,8 @@ try:
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()  # играем звук команды
 
-            # удаляем элементы меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg149.destroy()
-            self.pg452.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
+            # Удаляем элементы меню
+            self.destroy_menu()
 
             # Рисуем интерфейс
             self.pg1384 = DirectScrolledFrame(
@@ -1491,15 +1459,8 @@ try:
         def choose_server(self, rootParent=None):
             # выбор сервера
 
-            # удаляем элементы меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg149.destroy()
-            self.pg452.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
+            # Удаляем элементы меню
+            self.destroy_menu()
 
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()  # играем звук команды
@@ -1788,7 +1749,7 @@ try:
             self.load_game()  # открываем игру
 
         def set_lifes(self):
-            self.state = self.pg28909.guiItem.getValue() * 100  # загрузим слайдерное значение умноженое на 100, да трачу оптимизацию но мне кажется многим плевать на оптимизацию меню, ибо такого понятия просто нету :)
+            self.state = self.pg3035.guiItem.getValue() * 100  # загрузим слайдерное значение умноженое на 100, да трачу оптимизацию но мне кажется многим плевать на оптимизацию меню, ибо такого понятия просто нету :)
             self.state_droid = int(self.state // 2)
             self.state = int(self.state // 1)
 
@@ -1807,7 +1768,7 @@ try:
             self.command_sound.play()
             self.EN = True
 
-        def pro_system(self):
+        def pro_system(self, value):
             '''Проффесиональное управление'''
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()
@@ -1819,41 +1780,13 @@ try:
 
             sending(f'Lgged as {USERNAME}! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
 
-            # убираем элементы меню
-            self.pg3083.destroy()
-            self.pg27986.destroy()
-            self.pg28909.destroy()
-            self.pg438.destroy()
-            self.pg326.destroy()
-            self.pgSingle.destroy()
-            self.pgServers.destroy()
-            self.pg452.destroy()
+            # Удаляем элементы меню
+            self.destroy_menu()
 
-            # все действия над сервером если не включена одиночная игра
-            if not self.single:
-                self.networking = PythonNetContext()  # сервер
-                self.networking.bindSocket(DEFAULT_PORT)  # 'одеваем на сервер' его порт
-                self.networking.connectToServer(self.arg_username, self.username)  # коннектим игрока к серверу
-                self.networking.clientConnect(self.username)  #ещё коннектим, без аргументов
-                self.networking.serverConnect(IP_USER)  # коннектим айпи игрока
-                self.networking.addClient(self.username)  # добавляем клиента.
-                self.networking.readTick()  # читаем сервер
-
-            else:
-                sending(f'Single player! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
-                s.close()  # закрываем сервер
 
             # если не выходили скроем глобус
             if not self.exiting:
                 self.globe.hide()
-
-            # Ксли включена одиночная игра - убираем кнопку чата
-            if self.single:
-                self.pg149.destroy()
-
-            # if no single mode
-            if not self.single:
-                start_client()  # запуск клиента
 
             # удаляем глобус, если не выходили из игры
             if not self.exiting:
@@ -2057,10 +1990,6 @@ try:
 
             else:  # если не показан
                 self.gui_objects = [self.state_info, self.state_droid_info, self.state_info2]  # графические объекты
-
-            # если не включили одиночную игру, добавляем в список графических обьектов кнопку чата
-            if not self.single:
-                self.gui_objects.append(self.pg149)
 
             self.enemies = [self.enemy]  # список врагов
 
@@ -2546,7 +2475,7 @@ try:
             return
 
         def easy_exit(self):
-            sending(f'Exited! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
+            #sending(f'Exited! {IP_USER}:{DEFAULT_PORT}')  # отправляем сообщение на сервер
             # обычный выход(из меню)
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()  # играем звук команды
@@ -2559,7 +2488,7 @@ try:
 
             # проверим, включена ли одиночная игра
             if not self.single:
-                self.networking.removeClient(self.username)  # удаляем игрока с сервера
+                s.close()  # закрываем подключение
 
             self.exiting = True  # поставим, что уже вышли из игры
 
@@ -2712,25 +2641,26 @@ except Exception as e:
     import src.ipgetter as ipgetter  # импорт получателя айпи
     from src.settings import *  # импорт настроек
 
-    only_for_error()  # если ошибка
-    message(f'''
-            [EN] Droid Game {VERSION_}(running on {IP_USER_}:{DEFAULT_PORT_}) is down. 
-            Restart the game and try again. If the error persists -
-            go to the main menu of the game, and click "Bug?", in which describe the problem:
-                1. When did the error occur?
-                2. Your processor (number of threads, cores, frequency, model)
-                3. Your video card (model name, memory size)
-                4. Screenshot/video.
-            After that, wait for an answer. Good luck!
-            [RU] Droid Game {VERSION_}(работающий на {IP_USER_}:{DEFAULT_PORT_}) упал.
-            Перезапустите программу и попробуйте снова. Если ошибка повторится - 
-            зайдите в главное меню игры, и нажмите "Bug?", в котором опишите проблему:
-                1. Когда произошла ошибка?
-                2. Ваш процессор(кол-во потоков, ядер, частота, модель)
-                3. Ваша видеокарта(название модели, объем памяти)
-                4. Скриншот/видео.
-            После этого ждите ответа. Желаем удачи!
-            Error:
-                {e}
-            ''')  # выводим сообщение
+    if not e == "[Errno 9] Неправильный дескриптор файла":
+        only_for_error()  # если ошибка
+        message(f'''
+                [EN] Droid Game {VERSION_}(running on {IP_USER_}:{DEFAULT_PORT_}) is down. 
+                Restart the game and try again. If the error persists -
+                go to the main menu of the game, and click "Bug?", in which describe the problem:
+                    1. When did the error occur?
+                    2. Your processor (number of threads, cores, frequency, model)
+                    3. Your video card (model name, memory size)
+                    4. Screenshot/video.
+                After that, wait for an answer. Good luck!
+                [RU] Droid Game {VERSION_}(работающий на {IP_USER_}:{DEFAULT_PORT_}) упал.
+                Перезапустите программу и попробуйте снова. Если ошибка повторится - 
+                зайдите в главное меню игры, и нажмите "Bug?", в котором опишите проблему:
+                    1. Когда произошла ошибка?
+                    2. Ваш процессор(кол-во потоков, ядер, частота, модель)
+                    3. Ваша видеокарта(название модели, объем памяти)
+                    4. Скриншот/видео.
+                После этого ждите ответа. Желаем удачи!
+                Error:
+                    {e}
+                ''')  # выводим сообщение
 
