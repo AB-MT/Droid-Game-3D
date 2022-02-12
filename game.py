@@ -27,10 +27,6 @@ def only_for_error():
 
 
 try:
-    # главная часть всей игры - Cython.
-    import pyximport # импоритурем Cython
-    pyximport.install() # инициализируем его
-
     from panda3d.core import *
 
     # встроенные в графических движка элементы
