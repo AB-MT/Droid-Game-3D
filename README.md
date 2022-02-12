@@ -15,6 +15,15 @@ In the **Linux** operating system, everything is simple: first, install all the 
 ## 👨‍💻 Windows
 For **Windows** we have a separate assembly with *.exe* and *.dll* files, which are always included when a new version is released, but if you want to play the game with the source code, then the installation is the same as y **Linux**, congratulations. 
 
+# 🇨 Build to C
+To compile to a .C file, you must enter the command from the game directory:
+```
+python setup.py build_ext --inplace
+```
+
+Type __y__ or just press __Enter__. After that, compilation will start. Although, you are unlikely to need it, because the repository already has a *.C* file with the game.
+
+
 
 # ⌨️ Management
 Here is the complete control for our game.
