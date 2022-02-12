@@ -5,3 +5,4 @@ screeninfo
 simplepbr
 pyperclip
 Cython
+Nuitka
