@@ -23,7 +23,7 @@ python setup.py build_ext --inplace
 
 Type __y__ or just press __Enter__. After that, compilation will start. Although, you are unlikely to need it, because the repository already has a *.C* file with the game.
 
-# 🅱️ Build to *.exe*/*.bin*
+# 🅱️ Build to *.exe* / *.bin*
 To build *exe* or *bin* using **Nuitka** write in terminal:
 ```
 bash build.sh
