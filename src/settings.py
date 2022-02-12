@@ -3,7 +3,7 @@ import src.ipgetter as ipgetter
 # Настройки, информция
 
 NAME = 'Droid Game 3D'
-VERSION = 'Release 1.1' # версия
+VERSION = 'Release 1.2' # версия
 COPYRIGHT = 'Mark Kim 2021' # автор, год создания
 DEVELOP_MODE = False # не включаем режим разроботчика
 DEFAULT_IP = '127.0.0.1' # IP по умолчанию
