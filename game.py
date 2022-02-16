@@ -27,6 +27,7 @@ def only_for_error():
 
 
 try:
+
     from panda3d.core import * # ядро игрового движка
 
     # встроенные в графических движка элементы
@@ -1065,14 +1066,92 @@ try:
 
             self.accept('esc', self.profile_gui_destroy)  # при нажатии E - убираем это меню
 
-        def open_privilege_gui(self):
+        def privileges_gui_destroy(self):
+            # Удаляем элементы меню привилегий
+            self.pg1288.destroy()
+            self.pg2390.destroy()
+            self.pg5045.destroy()
+
+            self.menu(False) # открываем меню
+
+        def open_privilege_gui(self, rootParent=None):
             # Удаляем элементы меню
             self.navigator_gui_destroy()
 
             self.click_sound.play()  # играем звук клика
             self.command_sound.play()  # играем звук команды
 
-            self.prvilege_gui = privilege_gui()  # загружаем интерфейс привелегий
+            self.pg1288 = DirectLabel(
+                frameSize=(-3.55, 3.55, -0.113, 0.725),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.05, 0, 0.575),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Привилегии',
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                parent=rootParent,
+                text_font=self.ia_inst_font,
+            )
+            self.pg1288.setTransparency(0)
+
+            self.pg2390 = DirectLabel(
+                frameSize=(-5.55, 5.55, -0.113, 0.725),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.05, 0, 0.325),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='1010 - писать в чате',
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                parent=rootParent,
+                text_font=self.ubunutu_inst_font
+                ,
+            )
+            self.pg2390.setTransparency(0)
+
+            self.pg5045 = DirectButton(
+                frameSize=LVecBase4f(-1.525, 1.65, -0.2125, 0.825),
+                hpr=LVecBase3f(0, 0, 0),
+                pos=LPoint3f(-0.675, 0, 0.55),
+                scale=LVecBase3f(0.1, 0.1, 0.1),
+                text='Меню',
+                text0_align=TextNode.A_center,
+                text0_scale=(1, 1),
+                text0_pos=(0, 0),
+                text0_fg=LVecBase4f(0, 0, 0, 1),
+                text0_bg=LVecBase4f(0, 0, 0, 0),
+                text0_wordwrap=None,
+                text1_align=TextNode.A_center,
+                text1_scale=(1, 1),
+                text1_pos=(0, 0),
+                text1_fg=LVecBase4f(0, 0, 0, 1),
+                text1_bg=LVecBase4f(0, 0, 0, 0),
+                text1_wordwrap=None,
+                text2_align=TextNode.A_center,
+                text2_scale=(1, 1),
+                text2_pos=(0, 0),
+                text2_fg=LVecBase4f(0, 0, 0, 1),
+                text2_bg=LVecBase4f(0, 0, 0, 0),
+                text2_wordwrap=None,
+                text3_align=TextNode.A_center,
+                text3_scale=(1, 1),
+                text3_pos=(0, 0),
+                text3_fg=LVecBase4f(0, 0, 0, 1),
+                text3_bg=LVecBase4f(0, 0, 0, 0),
+                text3_wordwrap=None,
+                parent=rootParent,
+                pressEffect=1,
+                command=self.privileges_gui_destroy,
+                text_font=self.ia_inst_font,
+            )
+            self.pg5045.setTransparency(0)
 
         def profile_gui_destroy(self):
             self.profile_gui.destroy()  # убираем интерфейс профиля
