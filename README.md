@@ -8,6 +8,9 @@
 
 [![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/WennMarcoRTX/MarcoEngine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge) 
 
+[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
+[![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg)
+    
 </div>
 
 This is a fresh game that was developed using the **Panda3D** game engine and **Python** language in the **PyCharm** IDE (I don't know why you need this information).
