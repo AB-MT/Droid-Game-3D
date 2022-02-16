@@ -9,7 +9,6 @@
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
     
 [![by mN!](https://img.shields.io/badge/By-MarcoNIT-brown.svg)](https://github.com/WennMarcoRTX)
-    
 [![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/WennMarcoRTX/MarcoEngine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge) 
 
 
