@@ -1,6 +1,6 @@
 <div id="droidgame3d-logo" align="center">
     <br/>
-    <img src="./logo.png" alt="DroidGame3D Logo" width="512"/>
+    <img src="./logo_new.png" alt="DroidGame3D Logo" width="512"/>
     <h2>Python Panda3D Third Person Shooter.</h2>
 </div>
 
