@@ -1,10 +1,14 @@
-[![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/DroidGame/DroidGame3D?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 
+<div id="droidgame3d-logo" align="center">
+    <br/>
+    <img src="./logo.png" alt="DroidGame3D Logo" width="512"/>
+    <h2>Python Panda3D Third Person Shooter.</h2>
+</div>
 
-[itch.io page](https://ma3rx.itch.io/droid-game-3d)
+<div id="badges" align="center">
 
-![image](https://gitlab.com/polskiychel/droidgame3d/-/raw/main/logo.png)
+[![Gitter](https://badges.gitter.im/DroidGame/DroidGame3D.svg)](https://gitter.im/WennMarcoRTX/MarcoEngine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge) 
 
-# 🤖 Droid Game 3D
+</div>
 
 This is a fresh game that was developed using the **Panda3D** game engine and **Python** language in the **PyCharm** IDE (I don't know why you need this information).
 At the moment, the game has a fairly large audience and a large daily online (1000+ players are stable). In general, there seems to be nothing more remarkable here, it's time to start our journey..
