@@ -41,6 +41,23 @@ bash build.sh
 ```
 Done! Enjoy to play! 😉
 
+# 🚙 To start
+For play you want start TCP server using this command:
+
+```
+python3 server/server.py
+```
+
+After that, you can start game(*NOTE: DO NOT STOP TCP SERVER!*) using this command:
+```
+python3 game.py
+```
+
+Or, use Cython:
+```
+cython game.pyx
+```
+
 # ⌨️ Management
 Here is the complete control for our game.
 ## 🔵 On the menu:
