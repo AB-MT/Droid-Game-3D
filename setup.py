@@ -13,7 +13,7 @@ def welcome():
 
 
 def go_or_no():
-    print(f'Now you can install {NAME}') # поехали
+    print(f'Now you can build {NAME}') # поехали
     go = input('Go?[Y/n]') # поехали?
     if go == None or go == '':
         setup(
