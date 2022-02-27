@@ -53,8 +53,8 @@ try:
     from direct.gui.DirectSlider import DirectSlider  # слайдер
     from direct.gui.DirectCheckBox import DirectCheckBox  # галочка
     from direct.gui.DirectCheckButton import DirectCheckButton  # галочка с текстом
-    from src.marconit_engine import *
-    from src.bot import *
+    from src.marconit_engine import * # мой движок :3
+    from src.bot import * # боты-противники
 
     from direct.distributed.PyDatagram import \
         PyDatagram  # PyDatagram - простой встроенный модуль в движок для создания онлайна
@@ -68,7 +68,7 @@ try:
     from src.GUI.privilege import GUI as privilege_gui # интерфейс привелегий
     from src.GUI.settings_gui import GUI as settings_gui # интерфейс настроек
     from src.GUI.user_profile import GUI as user_profile_gui # интерфейс профиля пользователя
-    from src.parsers.loading_levels import *
+    from src.parsers.loading_levels import * # парсер уровней
     from src.sys.servers_sys import * # система серверов
     import src.audio as audio  # аудио
     import src.pbp as pbp  # pbr система
@@ -82,7 +82,7 @@ try:
     from screeninfo import get_monitors  # модуль для получения информации об экране
     import socket  #  модуль для сервера
     import json  # читатель файлов(если есть аддоны)
-    import requests  # запрсник
+    import requests  # запросник
     import asyncio  # ассинхоность
     import select  # типа сокета, но лучше
 
