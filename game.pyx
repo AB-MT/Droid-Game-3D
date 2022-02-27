@@ -556,6 +556,9 @@ try:
             self.pg57473.destroy()
             self.pg58545.destroy()
             self.pg128050.destroy()
+            self.pg128050.destroy()
+
+            self.menu(False)
 
         def open_navigator(self, rootParent=None):
             # Удаляем элементы меню
@@ -794,7 +797,7 @@ try:
                 text3_bg=LVecBase4f(0, 0, 0, 0),
                 text3_wordwrap=None,
                 text_font=self.inst_font,
-                command=self.navigator_destroy,
+                command=self.navigator_gui_destroy,
                 parent=rootParent,
                 pressEffect=1,
             )
