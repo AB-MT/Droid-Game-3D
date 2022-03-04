@@ -156,7 +156,7 @@ try:
             f = requests.get(link)  # получаем текст
             if True:  # текст будет либо True либо False
                 update = 'it"s not work, sorry('
-                vers  = '4/6'
+                vers  = 'vers here'
                 await message(f'''
                         UPDATE! Added: {update}
                                 Number update: {vers}
@@ -262,6 +262,13 @@ try:
                 self.screen_width = monitor.width - 700  # делаем новый размер окна по ширине
                 self.screen_height = monitor.height - 400  # делаем новый размер окна по высоте
 
+            # --------шрифты---------
+            self.font = loader.loadFont('./fonts/doom_font.ttf')  # загрузим шрифт из игры doom
+            self.inst_font = loader.loadFont('./fonts/arial.ttf')  # загрузим шрифт arial
+            self.ubunutu_inst_font = loader.loadFont('./fonts/UbuntuMono-BI.ttf') # загрузим шрифт UbunutuMono
+            self.ia_inst_font = loader.loadFont('./fonts/iAWriterDuoS-Bold.ttf') # загрузим шрифт iAWriterDuos
+
+            
             self.menu(False)  # зaпуск меню
 
         def weapon_menu___init__(self, cm, rootParent=None):
@@ -292,6 +299,7 @@ try:
                     text_wordwrap=None,
                     parent=rootParent,
                     pressEffect=1,
+                    font=self.ia_inst_font,
                     command=self.pistol_choosed
                 )
                 self.pistol_weapon.setTransparency(0)
@@ -313,6 +321,7 @@ try:
                     text_wordwrap=None,
                     parent=rootParent,
                     pressEffect=1,
+                    font=self.ia_inst_font,
                     command=self.sniper_choosed
                 )
                 self.sniper_weapon.setTransparency(0)
@@ -363,11 +372,7 @@ try:
             self.win.setClearColor((0.2, 0.3
                                     , 0.6,
                                     1))  # Закрашиваем поверхность голубым. Дело в том, что по умолчанию в этом игровом движке поверхность закрашивается серым.
-            self.font = loader.loadFont('./fonts/doom_font.ttf')  # загрузим шрифт из игры doom
-            self.inst_font = loader.loadFont('./fonts/arial.ttf')  # загрузим шрифт arial
-            self.ubunutu_inst_font = loader.loadFont('./fonts/UbuntuMono-BI.ttf') # загрузим шрифт UbunutuMono
-            self.ia_inst_font = loader.loadFont('./fonts/iAWriterDuoS-Bold.ttf') # загрузим шрифт iAWriterDuos
-
+            
             self.crackSound = audio.FlatSound('./sounds/glass-shatter1.ogg')  # звук взрыва корабля
             self.shotSound = audio.FlatSound('./sounds/sniper-rifle.ogg')  # звук выстрела
             self.errorSound = audio.FlatSound('./sounds/reload.ogg')  # звук запуска
