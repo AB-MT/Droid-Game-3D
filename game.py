@@ -299,7 +299,7 @@ try:
                     text_wordwrap=None,
                     parent=rootParent,
                     pressEffect=1,
-                    font=self.ia_inst_font,
+                    text_font=self.ia_inst_font,
                     command=self.pistol_choosed
                 )
                 self.pistol_weapon.setTransparency(0)
@@ -321,7 +321,7 @@ try:
                     text_wordwrap=None,
                     parent=rootParent,
                     pressEffect=1,
-                    font=self.ia_inst_font,
+                    text_font=self.ia_inst_font,
                     command=self.sniper_choosed
                 )
                 self.sniper_weapon.setTransparency(0)
